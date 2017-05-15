@@ -1,6 +1,9 @@
 import com.sun.istack.internal.Nullable;
+import sun.awt.image.ImageWatched;
 
 import java.io.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Copyright © 2017 Jan Krämer
@@ -64,7 +67,7 @@ public class Board {
     }
 
     private void addFreeLine(int row) {
-        for(int index = 0;index < squares[row].length;index++){
+        for (int index = 0; index < squares[row].length; index++) {
             squares[row][index] = FREEPOSITION;
         }
     }
@@ -120,16 +123,45 @@ public class Board {
 
 
     public void move(Move move) {
-        char objekt = squares[move.getFrom().getRow() -1 ][move.getFrom().getCol()];
-        squares[move.getFrom().getRow() - 1][move.getFrom().getCol()] = '.';
-        int row = move.getTo().getRow() - 1;
-        int col = move.getTo().getCol();
-        squares[row][col] = objekt;
+        if (isPieceFromActualColor(squares[move.getFrom().getRow()][move.getFrom().getCol()])) {
+            char objekt = squares[move.getFrom().getRow() ][move.getFrom().getCol()];
+            squares[move.getFrom().getRow() ][move.getFrom().getCol()] = '.';
+            squares[move.getTo().getRow() ][move.getTo().getCol()] = objekt;
+            if (onMove == 'W') {
+                onMove = 'B';
+            } else {
+                onMove = 'W';
+                movNumber++;
+            }
+        } else {
+            throw new IllegalArgumentException("Move is not possible!");
+        }
     }
+
+    public void move(String move) {
+        move(new Move(move));
+    }
+
+
+    public LinkedList<Move> genMoves(){
+        return Algorithm.moveList(this);
+    }
+
+    private boolean isPieceFromActualColor(char c) {
+        if ( onMove == 'W' ){
+            if(c != '.' && ( c > 'A' && c < 'Z'))
+                return true;
+        }else if( onMove == 'B'){
+            if(c != '.' && ( c > 'a' && c < 'z'))
+                return true;
+        }
+        return false;
+    }
+
 
     private static String generateTestValue() {
         String firstline = "23 B\n";
-        String[] field = {"K....", "b....", ".k...", ".....", ".....", "....."};
+        String[] field = {".....", ".....", ".....", ".....", ".....", "B...."};
         StringBuilder builder = new StringBuilder();
         builder.append(firstline);
         for (int i = field.length - 1; i >= 0; i--) {
@@ -139,11 +171,24 @@ public class Board {
         return builder.toString();
     }
 
+    public char getOnMove() {
+        return onMove;
+    }
+
+    public char[][] getSquares() {
+        return squares;
+    }
+
     public static void main(String[] args) {
         Board board = new Board();
         System.out.println(board.toString());
 
-        board.move(new Move("a2-a3"));
-        System.out.println(board.toString());
+       // board.move(new Move(new Square(0,1),new Square(0,2)));
+       // System.out.println(board.toString());
+        LinkedList<Move> moves = board.genMoves();
+        for(Move current: moves){
+            System.out.println(current);
+        }
+
     }
 }
