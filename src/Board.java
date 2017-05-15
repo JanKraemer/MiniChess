@@ -1,5 +1,5 @@
 import com.sun.istack.internal.Nullable;
-import sun.awt.image.ImageWatched;
+import sun.plugin.javascript.navig.Link;
 
 import java.io.*;
 import java.util.LinkedList;
@@ -124,9 +124,9 @@ public class Board {
 
     public void move(Move move) {
         if (isPieceFromActualColor(squares[move.getFrom().getRow()][move.getFrom().getCol()])) {
-            char objekt = squares[move.getFrom().getRow() ][move.getFrom().getCol()];
-            squares[move.getFrom().getRow() ][move.getFrom().getCol()] = '.';
-            squares[move.getTo().getRow() ][move.getTo().getCol()] = objekt;
+            char objekt = squares[move.getFrom().getRow()][move.getFrom().getCol()];
+            squares[move.getFrom().getRow()][move.getFrom().getCol()] = '.';
+            squares[move.getTo().getRow()][move.getTo().getCol()] = objekt;
             if (onMove == 'W') {
                 onMove = 'B';
             } else {
@@ -139,20 +139,52 @@ public class Board {
     }
 
     public void move(String move) {
-        move(new Move(move));
+        Move actualMove = new Move(move);
+        if (isNotFree(actualMove.getFrom()) &&
+                isPieceFromActualColor(squares[actualMove.getFrom().getRow()][actualMove.getFrom().getCol()])) {
+            LinkedList<Move> possibleMoves = Algorithm.moveList(this,
+                    actualMove.getFrom().getRow(), actualMove.getFrom().getCol());
+            if (isMovePossible(possibleMoves, actualMove)) {
+                this.move(actualMove);
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Move is not possible!");
+
+    }
+
+    private boolean isMovePossible(LinkedList<Move> possibleMoves, Move actualMove) {
+        if (possibleMoves != null && !possibleMoves.isEmpty()) {
+            for (Move move : possibleMoves) {
+                if (move.getTo().getRow() == actualMove.getTo().getRow() &&
+                        move.getTo().getCol() == actualMove.getTo().getCol())
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isNotFree(Square from) {
+        return squares[from.getRow()][from.getCol()] != '.';
     }
 
 
-    public LinkedList<Move> genMoves(){
-        return Algorithm.moveList(this);
+    public LinkedList<Move> genMoves() {
+        LinkedList<Move> moves = new LinkedList<>();
+        for (int row = 0; row < squares.length; row++) {
+            for (int column = 0; column < squares[row].length; column++) {
+                moves.addAll(Algorithm.moveList(this, row, column));
+            }
+        }
+        return moves;
     }
 
     private boolean isPieceFromActualColor(char c) {
-        if ( onMove == 'W' ){
-            if(c != '.' && ( c > 'A' && c < 'Z'))
+        if (onMove == 'W') {
+            if (c != '.' && (c > 'A' && c < 'Z'))
                 return true;
-        }else if( onMove == 'B'){
-            if(c != '.' && ( c > 'a' && c < 'z'))
+        } else if (onMove == 'B') {
+            if (c != '.' && (c > 'a' && c < 'z'))
                 return true;
         }
         return false;
@@ -183,12 +215,18 @@ public class Board {
         Board board = new Board();
         System.out.println(board.toString());
 
-       // board.move(new Move(new Square(0,1),new Square(0,2)));
-       // System.out.println(board.toString());
+        board.move("a2-a3");
+        System.out.println(board.toString());
+
+        board = new Board();
+        board.move(new Move(new Square(1,0),new Square(2,0)));
+        System.out.println(board.toString());
+
+
+        board = new Board();
         LinkedList<Move> moves = board.genMoves();
-        for(Move current: moves){
+        for (Move current : moves) {
             System.out.println(current);
         }
-
     }
 }
