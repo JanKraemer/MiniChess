@@ -25,12 +25,12 @@ public class Square {
         row = field.charAt(1) - '0';
     }
 
-    public Square(int col, int row) {
+    public Square(int row, int col) {
         this.col = col;
         this.row = row;
     }
     public String toString() {
-        return (char)(col+'a')+""+(char)(row+'0');
+        return (char)(col+'a')+""+(char)(row+'1');
     }
 
     public int getCol() {
