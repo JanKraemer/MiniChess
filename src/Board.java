@@ -19,12 +19,12 @@ public class Board {
 
     public static char[] FIRSTLINE = {'k', 'q', 'b', 'n', 'r'};
     public static char[] LASTLINE = {'R', 'N', 'B', 'Q', 'K'};
-    public static char[] FREELINE = {'.', '.', '.', '.', '.'};
+    public static char FREEPOSITION = '.';
     public static char PRAWN_BLACK = 'p';
     public static char PRAWN_WHITE = 'P';
-    public static int COLUMNS = 6;
-    public static int ROWS = 5;
-    private char[][] squares = new char[COLUMNS][ROWS];
+    public static int ROWS = 6;
+    public static int COLUMNS = 5;
+    private char[][] squares = new char[ROWS][COLUMNS];
     private int movNumber;
     private char onMove;
 
@@ -41,33 +41,39 @@ public class Board {
 
     private void initBoard(@Nullable String state) {
         if (state == null) {
-            for (int column = 0; column < squares.length; column++) {
-                if (column == 0)
-                    squares[column] = FIRSTLINE;
-                else if (column == 1 || column == 4)
-                    addPrawns(column);
-                else if (column == 5)
-                    squares[column] = LASTLINE;
+            for (int row = squares.length - 1; row >= 0; row--) {
+                if (row == squares.length - 1)
+                    squares[row] = FIRSTLINE;
+                else if (row == 1 || row == 4)
+                    addPrawns(row);
+                else if (row == 0)
+                    squares[row] = LASTLINE;
                 else
-                    squares[column] = FREELINE;
+                    addFreeLine(row);
             }
         } else {
             String[] lines = state.split("\n");
-            if(lines.length != 7 )
-                throw  new IllegalArgumentException("The String has not the correct number of lines");
+            if (lines.length != 7)
+                throw new IllegalArgumentException("The String has not the correct number of lines");
             String[] firstline = lines[0].split(" ");
             movNumber = Integer.valueOf(firstline[0]);
             onMove = firstline[1].charAt(0);
-            for (int line = 0; line < squares.length; line++)
+            for (int line = squares.length - 1; line >= 0; line--)
                 squares[line] = lines[line + 1].toCharArray();
+        }
+    }
+
+    private void addFreeLine(int row) {
+        for(int index = 0;index < squares[row].length;index++){
+            squares[row][index] = FREEPOSITION;
         }
     }
 
     private void addPrawns(int column) {
         for (int index = 0; index < squares[column].length; index++) {
-            if (column == 1)
-                squares[column][index] = PRAWN_BLACK;
             if (column == 4)
+                squares[column][index] = PRAWN_BLACK;
+            if (column == 1)
                 squares[column][index] = PRAWN_WHITE;
         }
     }
@@ -93,16 +99,16 @@ public class Board {
     public String toString() {
         StringBuilder builder = new StringBuilder()
                 .append(getFirstLineString());
-        for (int i = 0; i < squares.length; i++) {
+        for (int i = squares.length - 1; i >= 0; i--) {
             builder.append(String.valueOf(squares[i]) + "\n");
         }
         return builder.toString();
     }
 
     public void print(Writer writer) {
-        try{
+        try {
             writer.write(toString());
-        }catch (IOException exception){
+        } catch (IOException exception) {
 
         }
 
@@ -112,21 +118,32 @@ public class Board {
         return movNumber + " " + onMove + "\n";
     }
 
+
+    public void move(Move move) {
+        char objekt = squares[move.getFrom().getRow() -1 ][move.getFrom().getCol()];
+        squares[move.getFrom().getRow() - 1][move.getFrom().getCol()] = '.';
+        int row = move.getTo().getRow() - 1;
+        int col = move.getTo().getCol();
+        squares[row][col] = objekt;
+    }
+
+    private static String generateTestValue() {
+        String firstline = "23 B\n";
+        String[] field = {"K....", "b....", ".k...", ".....", ".....", "....."};
+        StringBuilder builder = new StringBuilder();
+        builder.append(firstline);
+        for (int i = field.length - 1; i >= 0; i--) {
+            builder.append(field[i] + "\n");
+        }
+
+        return builder.toString();
+    }
+
     public static void main(String[] args) {
         Board board = new Board();
         System.out.println(board.toString());
 
-        board = new Board(generateTestValue());
+        board.move(new Move("a2-a3"));
         System.out.println(board.toString());
-    }
-
-    private static String generateTestValue(){
-        String firstline = "23 B\n";
-        String[] field = {"K....","b....",".k...",".....",".....","....."};
-        StringBuilder builder = new StringBuilder();
-        builder.append(firstline);
-        for(int i = 0;i< field.length;i++)
-            builder.append(field[i]+"\n");
-        return builder.toString();
     }
 }
