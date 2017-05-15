@@ -21,6 +21,11 @@ public class Move {
         to = new Square(elements[1]);
     }
 
+    public Move(Square from, Square to){
+        this.from = from;
+        this.to = to;
+    }
+
     @Override
     public String toString() {
         return from.toString()+"-"+to.toString();
@@ -34,7 +39,8 @@ public class Move {
         return to;
     }
     public static void main(String[] args){
-
+        Move move = new Move(new Square(0,1), new Square(0,2));
+        System.out.println(move);
 
     }
 
