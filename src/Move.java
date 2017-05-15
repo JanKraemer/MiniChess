@@ -38,8 +38,9 @@ public class Move {
     public Square getTo() {
         return to;
     }
+
     public static void main(String[] args){
-        Move move = new Move(new Square(0,1), new Square(0,2));
+        Move move = new Move(new Square(1,0), new Square(2,0));
         System.out.println(move);
 
     }
