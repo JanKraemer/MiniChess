@@ -100,14 +100,12 @@ public class Board {
     }
 
     public void print(Writer writer) {
-        BufferedWriter bufferedWriter = new BufferedWriter(writer);
-        try {
-            writer.write(getFirstLineString());
-            for (int i = 0; i < squares.length; i++)
-                bufferedWriter.write(String.valueOf(squares[i]) + "\n");
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        try{
+            writer.write(toString());
+        }catch (IOException exception){
+
         }
+
     }
 
     private String getFirstLineString() {
