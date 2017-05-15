@@ -30,31 +30,31 @@ public class Algorithm {
             if (isKingOrQueen(square[row][column])) {
                 boolean stop = isKing(square[row][column]);
 
-                moves.addAll(symmscan(row, column, 0, 1, stop, null));
+                moves.addAll(symmscan(column, row, 0, 1, stop, null));
 
-                moves.addAll(symmscan(row, column, 1, 1, stop, null));
+                moves.addAll(symmscan(column, row, 1, 1, stop, null));
 
             } else if (isRookOrBishop(square[row][column])) {
                 boolean stop = isBishop(square[row][column]);
 
                 if (isRook(square[row][column])) {
 
-                    moves.addAll(symmscan(row, column, 0, 1, stop, Capture.TRUE));
+                    moves.addAll(symmscan(column, row, 0, 1, stop, Capture.TRUE));
 
                 } else {
 
-                    moves.addAll(symmscan(row, column, 0, 1, stop, Capture.FALSE));
+                    moves.addAll(symmscan(column, row, 0, 1, stop, Capture.FALSE));
 
                 }
                 if (isBishop(square[row][column])) {
 
-                    moves.addAll(symmscan(row, column, 1, 1, false, Capture.TRUE));
+                    moves.addAll(symmscan(column, row, 1, 1, false, Capture.TRUE));
                 }
             } else if (isKnight(square[row][column])) {
 
-                moves.addAll(symmscan(row, column, 1, 2, true, null));
+                moves.addAll(symmscan(column, row, 1, 2, true, null));
 
-                moves.addAll(symmscan(row, column, -1, 2, true, null));
+                moves.addAll(symmscan(column, row, -1, 2, true, null));
 
             } else if (isPrawn(square[row][column])) {
                 int dir = 1;
@@ -62,11 +62,11 @@ public class Algorithm {
                 if (isBlack(square[row][column])) {
                     dir = -1;
                 }
-                moves.addAll(symmscan(row, column, -1, dir, true, Capture.ONLY));
+                moves.addAll(symmscan(column, row, -1, dir, true, Capture.ONLY));
 
-                moves.addAll(symmscan(row, column, 1, dir, true, Capture.ONLY));
+                moves.addAll(symmscan(column, row, 1, dir, true, Capture.ONLY));
 
-                moves.addAll(symmscan(row, column, 0, dir, true, Capture.FALSE));
+                moves.addAll(symmscan(column, row, 0, dir, true, Capture.FALSE));
             }
 
         }
@@ -122,33 +122,33 @@ public class Algorithm {
         do {
             x += dx;
             y += dy;
-            if (outOfBounds(x, y))
+            if (outOfBounds(y, x))
                 break;
-            if (isPiece(x, y)) {
-                if (isSameColor(x, y, color))
+            if (isPiece(y, x)) {
+                if (isSameColor(y, x, color))
                     break;
                 if (capture == Capture.FALSE)
                     break;
                 stopShort = true;
             } else if (capture == Capture.ONLY)
                 break;
-            moves.add(new Move(new Square(y0, x0), new Square(y, x))); // Tauschen von x und y fürs hinzufügen.
+            moves.add(new Move(new Square(x0, y0), new Square(x, y))); 
         } while (!stopShort);
         return moves;
     }
 
-    private static boolean isSameColor(int x, int y, char color) {
+    private static boolean isSameColor(int y, int x, char color) {
         if (color == 'W') {
-            return gameBoard.getSquares()[x][y] > 'A' || gameBoard.getSquares()[x][y] < 'Z';
+            return gameBoard.getSquares()[y][x] > 'A' || gameBoard.getSquares()[y][x] < 'Z';
         }
-        return gameBoard.getSquares()[x][y] > 'a' || gameBoard.getSquares()[x][y] < 'z';
+        return gameBoard.getSquares()[y][x]> 'a' || gameBoard.getSquares()[y][x] < 'z';
     }
 
-    private static boolean isPiece(int x, int y) {
-        return gameBoard.getSquares()[x][y] != '.';
+    private static boolean isPiece(int y, int x) {
+        return gameBoard.getSquares()[y][x] != '.';
     }
 
-    private static boolean outOfBounds(int x, int y) {
-        return (x < 0 || y < 0 || x > 5 || y > 4);
+    private static boolean outOfBounds(int y, int x) {
+        return (x < 0 || y < 0 || x > 4 || y > 5);
     }
 }
