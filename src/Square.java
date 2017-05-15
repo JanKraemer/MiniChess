@@ -25,7 +25,7 @@ public class Square {
         row = field.charAt(1) - '1';
     }
 
-    public Square(int row, int col) {
+    public Square(int col, int row) {
         this.col = col;
         this.row = row;
     }

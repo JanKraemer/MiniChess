@@ -132,7 +132,7 @@ public class Algorithm {
                 stopShort = true;
             } else if (capture == Capture.ONLY)
                 break;
-            moves.add(new Move(new Square(x0, y0), new Square(x, y))); // Tauschen von x und y fürs hinzufügen.
+            moves.add(new Move(new Square(y0, x0), new Square(y, x))); // Tauschen von x und y fürs hinzufügen.
         } while (!stopShort);
         return moves;
     }

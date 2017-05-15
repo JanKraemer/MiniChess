@@ -219,7 +219,7 @@ public class Board {
         System.out.println(board.toString());
 
         board = new Board();
-        board.move(new Move(new Square(1,0),new Square(2,0)));
+        board.move(new Move(new Square(0,1),new Square(0,2)));
         System.out.println(board.toString());
 
 
