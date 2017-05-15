@@ -22,7 +22,7 @@ public class Square {
 
     public Square(String field) {
         col = field.charAt(0) - 'a';
-        row = field.charAt(1) - '0';
+        row = field.charAt(1) - '1';
     }
 
     public Square(int row, int col) {
