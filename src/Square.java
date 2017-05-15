@@ -11,31 +11,46 @@
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-public class Move {
+public class Square {
 
-    private Square from, to;
+    private int col;
+    private int row;
 
-    public Move(String string){
-        String[] elements = string.split("-");
-        from = new Square(elements[0]);
-        to = new Square(elements[1]);
+    public Square() {
+        col= row = 0;
     }
 
-    @Override
+    public Square(String field) {
+        col = field.charAt(0) - 'a';
+        row = field.charAt(1) - '0';
+    }
+
+    public Square(int col, int row) {
+        this.col = col;
+        this.row = row;
+    }
     public String toString() {
-        return from.toString()+"-"+to.toString();
+        return (char)(col+'a')+""+(char)(row+'0');
     }
 
-    public Square getFrom() {
-        return from;
+    public int getCol() {
+        return col;
     }
 
-    public Square getTo() {
-        return to;
+    public int getRow() {
+        return row;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
     }
     public static void main(String[] args){
-
-
+        Square square = new Square("a4");
+        System.out.println(square);
     }
-
 }
+
