@@ -117,11 +117,22 @@ public class Board {
 
     }
 
+    /**
+     * Generate a String for the toString method to print the first Line with
+     * moveNumber and actual turnColor.
+     * @return a string with the movenumber and the Color, who has the next turn.
+     */
     private String getFirstLineString() {
         return movNumber + " " + onMove + "\n";
     }
 
-
+    /**
+     * Check if a piece from my color and not free.
+     * If the check is ok, the board is doing the move.
+     * If the check fails we threw a exception.
+     * Also Changing the Color for the next move and bump the movNumber if required.
+     * @param move doing the move which is giving as parameter.
+     */
     public void move(Move move) {
         if (isPieceFromActualColor(squares[move.getFrom().getRow()][move.getFrom().getCol()])) {
             char objekt = squares[move.getFrom().getRow()][move.getFrom().getCol()];
@@ -138,6 +149,11 @@ public class Board {
         }
     }
 
+    /**
+     * Check if the move is Possible and than doing the move,
+     * else we threw a Exception.
+     * @param move String with the next move
+     */
     public void move(String move) {
         Move actualMove = new Move(move);
         if (isNotFree(actualMove.getFrom()) &&
@@ -153,6 +169,12 @@ public class Board {
 
     }
 
+    /**
+     * Check if the move isPossible
+     * @param possibleMoves List of all possibleMoves for this piece.
+     * @param actualMove the giving move
+     * @return boolean after checking the move
+     */
     private boolean isMovePossible(LinkedList<Move> possibleMoves, Move actualMove) {
         if (possibleMoves != null && !possibleMoves.isEmpty()) {
             for (Move move : possibleMoves) {
@@ -164,11 +186,19 @@ public class Board {
         return false;
     }
 
+    /**
+     * Check if the actual position is not a free place
+     * @param from Square with the actual position
+     * @return boolean with result
+     */
     private boolean isNotFree(Square from) {
         return squares[from.getRow()][from.getCol()] != '.';
     }
 
-
+    /**
+     * Generate all possible Moves for all pieces
+     * @return List of all possible Pieces
+     */
     public LinkedList<Move> genMoves() {
         LinkedList<Move> moves = new LinkedList<>();
         for (int row = 0; row < squares.length; row++) {
@@ -179,6 +209,11 @@ public class Board {
         return moves;
     }
 
+    /**
+     * giving a piece and check if he is on turn.
+     * @param c is the actual positon
+     * @return boolean
+     */
     private boolean isPieceFromActualColor(char c) {
         if (onMove == 'W') {
             if (c != '.' && (c > 'A' && c < 'Z'))
@@ -190,7 +225,10 @@ public class Board {
         return false;
     }
 
-
+    /**
+     * generate a special TestValue
+     * @return
+     */
     private static String generateTestValue() {
         String firstline = "23 B\n";
         String[] field = {".....", ".....", ".....", ".....", ".....", "B...."};
@@ -211,6 +249,10 @@ public class Board {
         return squares;
     }
 
+    /**
+     * Test method for the Board
+     * @param args
+     */
     public static void main(String[] args) {
         Board board = new Board();
         System.out.println(board.toString());

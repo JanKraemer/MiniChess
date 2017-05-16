@@ -48,6 +48,11 @@ public class Square {
     public void setRow(int row) {
         this.row = row;
     }
+
+    /**
+     * Main Methode using for testing the Constructors of the class.
+     * @param args
+     */
     public static void main(String[] args){
         Square square = new Square("a4");
         System.out.println(square);
