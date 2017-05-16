@@ -62,11 +62,11 @@ public class Algorithm {
                 if (isBlack(square[row][column])) {
                     dir = -1;
                 }
-                moves.addAll(symmscan(column, row, -1, dir, true, Capture.ONLY));
+                moves.addAll(scan(column, row,  -1,dir, true, Capture.ONLY));
 
-                moves.addAll(symmscan(column, row, 1, dir, true, Capture.ONLY));
+                moves.addAll(scan(column, row, 1,dir, true, Capture.ONLY));
 
-                moves.addAll(symmscan(column, row, 0, dir, true, Capture.FALSE));
+                moves.addAll(scan(column, row,  0,dir, true, Capture.FALSE));
             }
 
         }
@@ -132,16 +132,16 @@ public class Algorithm {
                 stopShort = true;
             } else if (capture == Capture.ONLY)
                 break;
-            moves.add(new Move(new Square(x0, y0), new Square(x, y))); 
+            moves.add(new Move(new Square(x0, y0), new Square(x, y)));
         } while (!stopShort);
         return moves;
     }
 
     private static boolean isSameColor(int y, int x, char color) {
         if (color == 'W') {
-            return gameBoard.getSquares()[y][x] > 'A' || gameBoard.getSquares()[y][x] < 'Z';
+            return gameBoard.getSquares()[y][x] > 'A' && gameBoard.getSquares()[y][x] < 'Z';
         }
-        return gameBoard.getSquares()[y][x]> 'a' || gameBoard.getSquares()[y][x] < 'z';
+        return gameBoard.getSquares()[y][x] > 'a' && gameBoard.getSquares()[y][x] < 'z';
     }
 
     private static boolean isPiece(int y, int x) {

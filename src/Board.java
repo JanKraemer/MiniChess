@@ -120,6 +120,7 @@ public class Board {
     /**
      * Generate a String for the toString method to print the first Line with
      * moveNumber and actual turnColor.
+     *
      * @return a string with the movenumber and the Color, who has the next turn.
      */
     private String getFirstLineString() {
@@ -131,13 +132,21 @@ public class Board {
      * If the check is ok, the board is doing the move.
      * If the check fails we threw a exception.
      * Also Changing the Color for the next move and bump the movNumber if required.
+     *
      * @param move doing the move which is giving as parameter.
      */
-    public void move(Move move) {
+    public char move(Move move) {
         if (isPieceFromActualColor(squares[move.getFrom().getRow()][move.getFrom().getCol()])) {
             char objekt = squares[move.getFrom().getRow()][move.getFrom().getCol()];
             squares[move.getFrom().getRow()][move.getFrom().getCol()] = '.';
+            if (isSquareKing(squares[move.getTo().getRow()][move.getTo().getCol()])) {
+                squares[move.getTo().getRow()][move.getTo().getCol()] = objekt;
+                return onMove;
+            }
             squares[move.getTo().getRow()][move.getTo().getCol()] = objekt;
+            if (isPrawn(objekt) && isPrawnOnEdge(move.getTo().getRow())) {
+                squares[move.getTo().getRow()][move.getTo().getCol()]++;
+            }
             if (onMove == 'W') {
                 onMove = 'B';
             } else {
@@ -147,22 +156,39 @@ public class Board {
         } else {
             throw new IllegalArgumentException("Move is not possible!");
         }
+        if (movNumber == 41)
+            return '=';
+
+        return '?';
+    }
+
+    private boolean isPrawn(char objekt) {
+        return objekt == 'p' || objekt == 'P';
+    }
+
+    private boolean isSquareKing(char c) {
+        return c == 'k' || c == 'K';
+    }
+
+    private boolean isPrawnOnEdge(int row) {
+        return row == 0 || row == 5;
     }
 
     /**
      * Check if the move is Possible and than doing the move,
      * else we threw a Exception.
+     *
      * @param move String with the next move
      */
-    public void move(String move) {
+
+    public char move(String move) {
         Move actualMove = new Move(move);
         if (isNotFree(actualMove.getFrom()) &&
                 isPieceFromActualColor(squares[actualMove.getFrom().getRow()][actualMove.getFrom().getCol()])) {
             LinkedList<Move> possibleMoves = Algorithm.moveList(this,
                     actualMove.getFrom().getRow(), actualMove.getFrom().getCol());
             if (isMovePossible(possibleMoves, actualMove)) {
-                this.move(actualMove);
-                return;
+                return this.move(actualMove);
             }
         }
         throw new IllegalArgumentException("Move is not possible!");
@@ -171,8 +197,9 @@ public class Board {
 
     /**
      * Check if the move isPossible
+     *
      * @param possibleMoves List of all possibleMoves for this piece.
-     * @param actualMove the giving move
+     * @param actualMove    the giving move
      * @return boolean after checking the move
      */
     private boolean isMovePossible(LinkedList<Move> possibleMoves, Move actualMove) {
@@ -188,6 +215,7 @@ public class Board {
 
     /**
      * Check if the actual position is not a free place
+     *
      * @param from Square with the actual position
      * @return boolean with result
      */
@@ -197,13 +225,16 @@ public class Board {
 
     /**
      * Generate all possible Moves for all pieces
+     *
      * @return List of all possible Pieces
      */
     public LinkedList<Move> genMoves() {
         LinkedList<Move> moves = new LinkedList<>();
         for (int row = 0; row < squares.length; row++) {
             for (int column = 0; column < squares[row].length; column++) {
-                moves.addAll(Algorithm.moveList(this, row, column));
+                if (isPieceFromActualColor(squares[row][column])) {
+                    moves.addAll(Algorithm.moveList(this, row, column));
+                }
             }
         }
         return moves;
@@ -211,6 +242,7 @@ public class Board {
 
     /**
      * giving a piece and check if he is on turn.
+     *
      * @param c is the actual positon
      * @return boolean
      */
@@ -227,11 +259,12 @@ public class Board {
 
     /**
      * generate a special TestValue
+     *
      * @return
      */
     private static String generateTestValue() {
-        String firstline = "23 B\n";
-        String[] field = {".....", ".....", ".....", ".....", ".....", "B...."};
+        String firstline = "1 B\n";
+        String[] field = {".....", ".....", ".....", ".....", "....p", "...K."};
         StringBuilder builder = new StringBuilder();
         builder.append(firstline);
         for (int i = field.length - 1; i >= 0; i--) {
@@ -251,21 +284,16 @@ public class Board {
 
     /**
      * Test method for the Board
+     *
      * @param args
      */
     public static void main(String[] args) {
-        Board board = new Board();
-        System.out.println(board.toString());
+        Board board = new Board(generateTestValue());
+        System.out.println(board);
+        char result = board.move("e2-d1");
+        System.out.println(result);
+        System.out.println(board);
 
-        board.move("a2-a3");
-        System.out.println(board.toString());
-
-        board = new Board();
-        board.move(new Move(new Square(0,1),new Square(0,2)));
-        System.out.println(board.toString());
-
-
-        board = new Board();
         LinkedList<Move> moves = board.genMoves();
         for (Move current : moves) {
             System.out.println(current);
