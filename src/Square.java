@@ -51,6 +51,8 @@ public class Square {
     public static void main(String[] args){
         Square square = new Square("a4");
         System.out.println(square);
+        square = new Square(0,3);
+        System.out.println(square);
     }
 }
 
