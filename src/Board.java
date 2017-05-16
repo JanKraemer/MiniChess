@@ -1,9 +1,9 @@
 import com.sun.istack.internal.Nullable;
-import sun.plugin.javascript.navig.Link;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Copyright © 2017 Jan Krämer
@@ -25,6 +25,7 @@ public class Board {
     public static char FREEPOSITION = '.';
     public static char PRAWN_BLACK = 'p';
     public static char PRAWN_WHITE = 'P';
+    private static HashMap<Character, ArrayList<Square>> map = new HashMap<Character, ArrayList<Square>>();
     public static int ROWS = 6;
     public static int COLUMNS = 5;
     private char[][] squares = new char[ROWS][COLUMNS];
@@ -64,6 +65,26 @@ public class Board {
             for (int line = squares.length - 1; line >= 0; line--)
                 squares[line] = lines[line + 1].toCharArray();
         }
+        generateMap();
+    }
+
+    private void generateMap() {
+        ArrayList<Square> white = new ArrayList<>(10);
+        ArrayList<Square> black = new ArrayList<>(10);
+
+        for (int row = 0; row < ROWS; row++) {
+            for (int column = 0; column < COLUMNS; column++) {
+                if (isNotFree(squares[row][column])) {
+                    if (squares[row][column] > 'A' && squares[row][column] <= 'Z') {
+                        white.add(new Square(column, row));
+                    } else {
+                        black.add(new Square(column, row));
+                    }
+                }
+            }
+        }
+        map.put('W', white);
+        map.put('B', black);
     }
 
     private void addFreeLine(int row) {
@@ -101,10 +122,11 @@ public class Board {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder()
-                .append(getFirstLineString());
+                .append(getFirstLineString()+"\n");
         for (int i = squares.length - 1; i >= 0; i--) {
-            builder.append(String.valueOf(squares[i]) + "\n");
+            builder.append(i+1+"|"+ String.valueOf(squares[i]) + "|\n");
         }
+        builder.append(" |a|b|c|d|e|\n");
         return builder.toString();
     }
 
@@ -115,6 +137,10 @@ public class Board {
 
         }
 
+    }
+
+    public HashMap<Character, ArrayList<Square>> getMap() {
+        return map;
     }
 
     /**
@@ -136,30 +162,51 @@ public class Board {
      * @param move doing the move which is giving as parameter.
      */
     public char move(Move move) {
-        if (isPieceFromActualColor(squares[move.getFrom().getRow()][move.getFrom().getCol()])) {
-            char objekt = squares[move.getFrom().getRow()][move.getFrom().getCol()];
-            squares[move.getFrom().getRow()][move.getFrom().getCol()] = '.';
-            if (isSquareKing(squares[move.getTo().getRow()][move.getTo().getCol()])) {
-                squares[move.getTo().getRow()][move.getTo().getCol()] = objekt;
-                return onMove;
-            }
+        char objekt = squares[move.getFrom().getRow()][move.getFrom().getCol()];
+        updateOwnList(move);
+        updateEnemyList(move.getTo());
+        squares[move.getFrom().getRow()][move.getFrom().getCol()] = '.';
+        if (isSquareKing(squares[move.getTo().getRow()][move.getTo().getCol()])) {
             squares[move.getTo().getRow()][move.getTo().getCol()] = objekt;
-            if (isPrawn(objekt) && isPrawnOnEdge(move.getTo().getRow())) {
-                squares[move.getTo().getRow()][move.getTo().getCol()]++;
-            }
-            if (onMove == 'W') {
-                onMove = 'B';
-            } else {
-                onMove = 'W';
-                movNumber++;
-            }
-        } else {
-            throw new IllegalArgumentException("Move is not possible!");
+            return onMove;
         }
+        squares[move.getTo().getRow()][move.getTo().getCol()] = objekt;
+        if (isPrawn(objekt) && isPrawnOnEdge(move.getTo().getRow())) {
+            squares[move.getTo().getRow()][move.getTo().getCol()]++;
+        }
+        if (onMove == 'W') {
+            onMove = 'B';
+        } else {
+            onMove = 'W';
+            movNumber++;
+        }
+
         if (movNumber == 41)
             return '=';
 
         return '?';
+    }
+
+    private void updateEnemyList(Square to) {
+        char enemy = 'B';
+        if (onMove == enemy)
+            enemy = 'W';
+        for (Square square : map.get(enemy)) {
+            if (square.getRow() == to.getRow() && square.getCol() == to.getCol()) {
+                map.get(enemy).remove(square);
+                return;
+            }
+        }
+    }
+
+    private void updateOwnList(Move move) {
+        for (Square square : map.get(onMove)) {
+            if (square.getRow() == move.getFrom().getRow() && square.getCol() == move.getFrom().getCol()) {
+                map.get(onMove).remove(square);
+                map.get(onMove).add(move.getTo());
+                return;
+            }
+        }
     }
 
     private boolean isPrawn(char objekt) {
@@ -223,6 +270,10 @@ public class Board {
         return squares[from.getRow()][from.getCol()] != '.';
     }
 
+    private boolean isNotFree(char element) {
+        return element != '.';
+    }
+
     /**
      * Generate all possible Moves for all pieces
      *
@@ -230,12 +281,8 @@ public class Board {
      */
     public LinkedList<Move> genMoves() {
         LinkedList<Move> moves = new LinkedList<>();
-        for (int row = 0; row < squares.length; row++) {
-            for (int column = 0; column < squares[row].length; column++) {
-                if (isPieceFromActualColor(squares[row][column])) {
-                    moves.addAll(Algorithm.moveList(this, row, column));
-                }
-            }
+        for (Square actual : map.get(onMove)) {
+            moves.addAll(Algorithm.moveList(this, actual.getRow(), actual.getCol()));
         }
         return moves;
     }
@@ -288,15 +335,13 @@ public class Board {
      * @param args
      */
     public static void main(String[] args) {
-        Board board = new Board(generateTestValue());
+        Board board = new Board();
         System.out.println(board);
-        char result = board.move("e2-d1");
-        System.out.println(result);
-        System.out.println(board);
+     //   board.move("a2-a3");
 
-        LinkedList<Move> moves = board.genMoves();
-        for (Move current : moves) {
-            System.out.println(current);
-        }
+        // LinkedList<Move> moves = board.genMoves();
+     //   for (Square current : board.getMap().get(board.onMove)) {
+     //       System.out.println(current);
+     //   }
     }
 }

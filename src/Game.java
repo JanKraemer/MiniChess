@@ -53,7 +53,7 @@ public class Game {
     private static void initClient() throws IOException {
         client = new Client(URL,PORT,USERNAME,PASSWORD);
         if(client != null) {
-            client.accept("12801", 'W');
+            client.accept("12858", 'W');
         }
     }
 
