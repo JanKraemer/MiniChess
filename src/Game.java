@@ -1,5 +1,5 @@
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+import java.util.HashMap;
 
 /**
  * Copyright © 2017 Jan Krämer
@@ -23,69 +23,56 @@ public class Game {
 
     public static Client client;
 
+    public static HashMap<Character,Player> players = new HashMap<Character,Player>(2);
+
     public static String method;
     public static String id;
     public static char color;
 
     public static void main(String[] args){
-        initString(args);
+        initComponents(args);
         Board board = new Board();
-        Player player = new RandomPlayer();
         try{
             initClient();
+            setPlayers();
             System.out.println(board);
-            if(color == 'W'){
-                playAsFirst(player,board);
-            }else {
-                playAsSecond(player,board);
-            }
+            playGame(board);
+
         }catch (Exception exception){
             exception.printStackTrace();
         }
     }
 
-    private static void playAsSecond(Player player, Board board) throws IOException {
-        String response = "";
-        while (true){
-            response = client.getMove();
-            if(response != null){
-                doOtherMove(board,response);
-            }else{
+    private static void playGame(Board board) throws IOException{
+        while(true){
+            Player actual = players.get(board.getOnMove());
+            Move move = actual.getMove(board);
+            if(move == null)
                 break;
-            }
-            doOwnMove(player,board);
+            board.move(move);
+            actual.print(board,move);
         }
     }
 
-    private static void playAsFirst(Player player,Board board ) throws IOException {
-        String response = "";
-        while (true){
-            doOwnMove(player,board);
-            response = client.getMove();
-            if(response != null){
-                doOtherMove(board,response);
-            }else{
-                break;
-            }
-        }
+    private static void setPlayers() {
+        char otherColor = 'W';
+        if(color == otherColor)
+            otherColor = 'B';
+        players.put(otherColor,new ClientPlayer(client));
+        players.put(color,new RandomPlayer(client));
     }
 
-
-    private static void initString(String[] args) {
+       private static void initComponents(String[] args) {
         method = args[0];
         if(args.length == 2){
             color = args[1].charAt(0);
-        }else{
+        }else {
             id = args[1];
             color = args[2].charAt(0);
         }
     }
 
-    private static void doOtherMove(Board board, String response) {
-        char va = board.move(new Move(response));
-        System.out.println(response+" SERVER\n");
-        System.out.println(board);
-    }
+
 
     private static void initClient() throws IOException {
         client = new Client(URL,PORT,USERNAME,PASSWORD);
@@ -97,10 +84,4 @@ public class Game {
         }
     }
 
-    private static void doOwnMove(Player player,Board board){
-        Move move = player.getMove(board);
-        client.send(move.toString(),true);
-        char value = board.move(move);
-        System.out.println(board);
-    }
 }
