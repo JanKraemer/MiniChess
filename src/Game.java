@@ -40,7 +40,6 @@ public class Game {
         try {
             initClient();
             setPlayers();
-            System.out.println(board);
             playGame(board);
 
         } catch (Exception exception) {
@@ -55,6 +54,7 @@ public class Game {
      * @throws IOException
      */
     private static void playGame(Board board) throws IOException {
+        System.out.println(board);
         while (true) {
             Player actual = players.get(board.getOnMove());
             Move move = actual.getMove(board);
