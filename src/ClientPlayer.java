@@ -1,5 +1,4 @@
 import java.io.IOException;
-
 /**
  * Copyright © 2017 Jan Krämer
  * <p>
@@ -13,9 +12,25 @@ import java.io.IOException;
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-public abstract class Player {
+public class ClientPlayer extends Player {
 
-    abstract Move getMove(Board board) throws IOException;
+    private Client client;
 
-    abstract void print(Board board, Move move);
+    public ClientPlayer(Client client){
+        this.client = client;
+    }
+
+    @Override
+    Move getMove(Board board) throws IOException {
+        String response = "";
+        response = client.getMove();
+        if(response != null)
+            return new Move(response);
+        return  null;
+    }
+
+    @Override
+    void print(Board board, Move move) {
+        System.out.println(move + " Client\n" + board);
+    }
 }

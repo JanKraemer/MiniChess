@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.Random;
 
 /**
  * Copyright © 2017 Jan Krämer
@@ -15,14 +16,23 @@ import java.util.LinkedList;
  */
 public class RandomPlayer extends Player {
 
+    private Client client;
 
-    public RandomPlayer(){
+    public RandomPlayer(Client client){
+        this.client = client;
     }
 
     @Override
     Move getMove(Board board) {
         LinkedList<Move> moves = board.genMoves();
-        int random =(int) (Math.random()*moves.size());
-        return moves.get(random);
+        int random =new Random().nextInt(moves.size());
+        Move move = moves.get(random);
+        client.send(move.toString(),false);
+        return move;
     }
+    @Override
+    void print(Board board, Move move) {
+        System.out.println(move + " Random\n"+board);
+    }
+
 }

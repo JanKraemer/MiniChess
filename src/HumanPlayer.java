@@ -39,6 +39,11 @@ public class HumanPlayer extends Player {
         return move;
     }
 
+    @Override
+    void print(Board board, Move move) {
+        System.out.println(move + " Human\n"+board);
+    }
+
     private boolean isLegalMove(LinkedList<Move> moves, Move input) {
         for (Move move : moves) {
             if (areMovesEqual(move,input)){
