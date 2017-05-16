@@ -23,28 +23,65 @@ public class Game {
 
     public static Client client;
 
+    public static String method;
+    public static String id;
+    public static char color;
+
     public static void main(String[] args){
-        String response = "";
-        char value =' ';
+        initString(args);
         Board board = new Board();
         Player player = new RandomPlayer();
         try{
             initClient();
-            while (true){
-                doOwnMove(player,board);
-                response = client.getMove();
-                if(response != null){
-                  doOtherMove(player,board,response);
-                }else{
-                    break;
-                }
+            System.out.println(board);
+            if(color == 'W'){
+                playAsFirst(player,board);
+            }else {
+                playAsSecond(player,board);
             }
         }catch (Exception exception){
             exception.printStackTrace();
         }
     }
 
-    private static void doOtherMove(Player player, Board board, String response) {
+    private static void playAsSecond(Player player, Board board) throws IOException {
+        String response = "";
+        while (true){
+            response = client.getMove();
+            if(response != null){
+                doOtherMove(board,response);
+            }else{
+                break;
+            }
+            doOwnMove(player,board);
+        }
+    }
+
+    private static void playAsFirst(Player player,Board board ) throws IOException {
+        String response = "";
+        while (true){
+            doOwnMove(player,board);
+            response = client.getMove();
+            if(response != null){
+                doOtherMove(board,response);
+            }else{
+                break;
+            }
+        }
+    }
+
+
+    private static void initString(String[] args) {
+        method = args[0];
+        if(args.length == 2){
+            color = args[1].charAt(0);
+        }else{
+            id = args[1];
+            color = args[2].charAt(0);
+        }
+    }
+
+    private static void doOtherMove(Board board, String response) {
         char va = board.move(new Move(response));
         System.out.println(response+" SERVER\n");
         System.out.println(board);
@@ -53,7 +90,10 @@ public class Game {
     private static void initClient() throws IOException {
         client = new Client(URL,PORT,USERNAME,PASSWORD);
         if(client != null) {
-            client.accept("12858", 'W');
+            if(method.equalsIgnoreCase("accept"))
+                client.accept(id, color);
+            else
+                client.offer(color);
         }
     }
 

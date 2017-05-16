@@ -122,21 +122,17 @@ public class Board {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder()
-                .append(getFirstLineString()+"\n");
-        for (int i = squares.length - 1; i >= 0; i--) {
-            builder.append(i+1+"|"+ String.valueOf(squares[i]) + "|\n");
+                .append(getFirstLineString() + "\n");
+        for (int y = squares.length - 1; y >= 0; y--) {
+            builder.append(y + 1 + " | ");
+            for (int x = 0; x < squares[y].length; x++) {
+                builder.append( squares[y][x] + " | ");
+            }
+            builder.append("\n");
         }
-        builder.append(" |a|b|c|d|e|\n");
+        builder.append("-----------------------\n");
+        builder.append("  | a | b | c | d | e | \n");
         return builder.toString();
-    }
-
-    public void print(Writer writer) {
-        try {
-            writer.write(toString());
-        } catch (IOException exception) {
-
-        }
-
     }
 
     public HashMap<Character, ArrayList<Square>> getMap() {
