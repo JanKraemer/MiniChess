@@ -21,6 +21,14 @@ public class Algorithm {
         TRUE, FALSE, ONLY
     }
 
+    /**
+     * Gets all possible Moves for these position.
+     *
+     * @param board  actual board
+     * @param row    row of the piece
+     * @param column column of the piece
+     * @return list of all possible Moves of these piece
+     */
     public static LinkedList<Move> moveList(Board board, int row, int column) {
         LinkedList<Move> moves = new LinkedList<>();
         gameBoard = board;
@@ -62,11 +70,11 @@ public class Algorithm {
                 if (isBlack(square[row][column])) {
                     dir = -1;
                 }
-                moves.addAll(scan(column, row,  -1,dir, true, Capture.ONLY));
+                moves.addAll(scan(column, row, -1, dir, true, Capture.ONLY));
 
-                moves.addAll(scan(column, row, 1,dir, true, Capture.ONLY));
+                moves.addAll(scan(column, row, 1, dir, true, Capture.ONLY));
 
-                moves.addAll(scan(column, row,  0,dir, true, Capture.FALSE));
+                moves.addAll(scan(column, row, 0, dir, true, Capture.FALSE));
             }
 
         }
@@ -105,6 +113,17 @@ public class Algorithm {
         return piece == 'q' || piece == 'Q' || piece == 'k' || piece == 'K';
     }
 
+    /**
+     * Check all possible directions, if the piece can walk to it.
+     *
+     * @param x         actual column
+     * @param y         actual row
+     * @param dx        direction on column
+     * @param dy        direction on row
+     * @param stopShort is it short stops
+     * @param capture   enum of three states
+     * @return all possilbe Moves for input
+     */
     private static LinkedList<Move> symmscan(int x, int y, int dx, int dy, boolean stopShort, Capture capture) {
         LinkedList<Move> moves = new LinkedList<>();
         moves.addAll(scan(x, y, dx, dy, stopShort, capture));
@@ -114,6 +133,17 @@ public class Algorithm {
         return moves;
     }
 
+    /**
+     * Check all possible directions, if the piece can walk to it.
+     *
+     * @param x0        actual column position
+     * @param y0        actual row position
+     * @param dx        direction on column
+     * @param dy        direction on row
+     * @param stopShort is it short stops
+     * @param capture   enum of three states
+     * @return all possilbe Moves for input
+     */
     private static LinkedList<Move> scan(int x0, int y0, int dx, int dy, boolean stopShort, Capture capture) {
         LinkedList<Move> moves = new LinkedList<>();
         int x = x0;

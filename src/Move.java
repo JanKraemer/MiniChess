@@ -15,20 +15,20 @@ public class Move {
 
     private Square from, to;
 
-    public Move(String string){
+    public Move(String string) {
         String[] elements = string.split("-");
         from = new Square(elements[0]);
         to = new Square(elements[1]);
     }
 
-    public Move(Square from, Square to){
+    public Move(Square from, Square to) {
         this.from = from;
         this.to = to;
     }
 
     @Override
     public String toString() {
-        return from.toString()+"-"+to.toString();
+        return from.toString() + "-" + to.toString();
     }
 
     public Square getFrom() {
@@ -41,12 +41,13 @@ public class Move {
 
     /**
      * Main method for testing the Constructor with two Square objects.
+     *
      * @param args
      */
-    public static void main(String[] args){
-        Move move = new Move(new Square(0,1), new Square(0,2));
+    public static void main(String[] args) {
+        Move move = new Move(new Square(0, 1), new Square(0, 2));
         System.out.println(move);
-        move = new Move(new Square(1,1), new Square(2,2));
+        move = new Move(new Square(1, 1), new Square(2, 2));
         System.out.println(move);
     }
 

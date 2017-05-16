@@ -43,6 +43,12 @@ public class Board {
         initBoard(state);
     }
 
+    /**
+     * Initialise the board with / without a given state
+     * if the state is null , the board will initialised with a default board.
+     *
+     * @param state actual state of a game.
+     */
     private void initBoard(@Nullable String state) {
         if (state == null) {
             for (int row = squares.length - 1; row >= 0; row--) {
@@ -68,6 +74,10 @@ public class Board {
         generateMap();
     }
 
+    /**
+     * Generating the hashmap with all Squares of each side.
+     * Is needed for faster searching.
+     */
     private void generateMap() {
         ArrayList<Square> white = new ArrayList<>(10);
         ArrayList<Square> black = new ArrayList<>(10);
@@ -126,7 +136,7 @@ public class Board {
         for (int y = squares.length - 1; y >= 0; y--) {
             builder.append(y + 1 + " | ");
             for (int x = 0; x < squares[y].length; x++) {
-                builder.append( squares[y][x] + " | ");
+                builder.append(squares[y][x] + " | ");
             }
             builder.append("\n");
         }
@@ -183,6 +193,11 @@ public class Board {
         return '?';
     }
 
+    /**
+     * updating the oponents Arraylist of Squares.
+     *
+     * @param to Move
+     */
     private void updateEnemyList(Square to) {
         char enemy = 'B';
         if (onMove == enemy)
@@ -195,6 +210,11 @@ public class Board {
         }
     }
 
+    /**
+     * update my Arraylist of Squares , to be always save
+     *
+     * @param move current move
+     */
     private void updateOwnList(Move move) {
         for (Square square : map.get(onMove)) {
             if (square.getRow() == move.getFrom().getRow() && square.getCol() == move.getFrom().getCol()) {
@@ -205,14 +225,33 @@ public class Board {
         }
     }
 
+    /**
+     * check if it is a Prawn.
+     *
+     * @param objekt current piece
+     * @return
+     */
     private boolean isPrawn(char objekt) {
         return objekt == 'p' || objekt == 'P';
     }
 
+    /**
+     * check if it is a King..
+     *
+     * @param c current piece
+     * @return
+     */
     private boolean isSquareKing(char c) {
         return c == 'k' || c == 'K';
     }
 
+
+    /**
+     * check if the Prawn reaches the opponent edge
+     *
+     * @param row row of the prawn
+     * @return
+     */
     private boolean isPrawnOnEdge(int row) {
         return row == 0 || row == 5;
     }
@@ -333,11 +372,11 @@ public class Board {
     public static void main(String[] args) {
         Board board = new Board();
         System.out.println(board);
-     //   board.move("a2-a3");
+        //   board.move("a2-a3");
 
         // LinkedList<Move> moves = board.genMoves();
-     //   for (Square current : board.getMap().get(board.onMove)) {
-     //       System.out.println(current);
-     //   }
+        //   for (Square current : board.getMap().get(board.onMove)) {
+        //       System.out.println(current);
+        //   }
     }
 }

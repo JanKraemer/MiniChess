@@ -17,7 +17,7 @@ public class Square {
     private int row;
 
     public Square() {
-        col= row = 0;
+        col = row = 0;
     }
 
     public Square(String field) {
@@ -29,8 +29,9 @@ public class Square {
         this.col = col;
         this.row = row;
     }
+
     public String toString() {
-        return (char)(col+'a')+""+(char)(row+'1');
+        return (char) (col + 'a') + "" + (char) (row + '1');
     }
 
     public int getCol() {
@@ -51,12 +52,13 @@ public class Square {
 
     /**
      * Main Methode using for testing the Constructors of the class.
+     *
      * @param args
      */
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Square square = new Square("a4");
         System.out.println(square);
-        square = new Square(0,3);
+        square = new Square(0, 3);
         System.out.println(square);
     }
 }
