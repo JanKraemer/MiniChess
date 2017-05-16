@@ -23,61 +23,84 @@ public class Game {
 
     public static Client client;
 
-    public static HashMap<Character,Player> players = new HashMap<Character,Player>(2);
+    public static HashMap<Character, Player> players = new HashMap<Character, Player>(2);
 
     public static String method;
     public static String id;
     public static char color;
 
-    public static void main(String[] args){
+    /**
+     * Main Methode for a game
+     *
+     * @param args given Arguments from the user
+     */
+    public static void main(String[] args) {
         initComponents(args);
         Board board = new Board();
-        try{
+        try {
             initClient();
             setPlayers();
             System.out.println(board);
             playGame(board);
 
-        }catch (Exception exception){
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
 
-    private static void playGame(Board board) throws IOException{
-        while(true){
+    /**
+     * the methode does all the work and stops, when 1 player has won.
+     *
+     * @param board startBoard
+     * @throws IOException
+     */
+    private static void playGame(Board board) throws IOException {
+        while (true) {
             Player actual = players.get(board.getOnMove());
             Move move = actual.getMove(board);
-            if(move == null)
+            if (move == null)
                 break;
             board.move(move);
-            actual.print(board,move);
+            actual.print(board, move);
         }
     }
 
+    /**
+     * Add Players to HashMap with their Color as Key.
+     */
     private static void setPlayers() {
         char otherColor = 'W';
-        if(color == otherColor)
+        if (color == otherColor)
             otherColor = 'B';
-        players.put(otherColor,new ClientPlayer(client));
-        players.put(color,new RandomPlayer(client));
+        players.put(otherColor, new ClientPlayer(client));
+        players.put(color, new RandomPlayer(client));
     }
 
-       private static void initComponents(String[] args) {
+    /**
+     * initialise the three String from the user input.
+     * Is needed to initialise the client right.
+     *
+     * @param args input arguments from the user
+     */
+    private static void initComponents(String[] args) {
         method = args[0];
-        if(args.length == 2){
+        if (args.length == 2) {
             color = args[1].charAt(0);
-        }else {
+        } else {
             id = args[1];
             color = args[2].charAt(0);
         }
     }
 
-
-
+    /**
+     * Initialise the Client depending on the input.
+     *
+     * @throws IOException
+     */
     private static void initClient() throws IOException {
-        client = new Client(URL,PORT,USERNAME,PASSWORD);
-        if(client != null) {
-            if(method.equalsIgnoreCase("accept"))
+        client = new Client(URL, PORT, USERNAME, PASSWORD);
+        if (client != null) {
+            if (method.equalsIgnoreCase("accept"))
                 client.accept(id, color);
             else
                 client.offer(color);

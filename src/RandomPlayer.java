@@ -19,12 +19,13 @@ public class RandomPlayer extends Player {
 
     private Client client;
 
-    public RandomPlayer(Client client){
+    public RandomPlayer(Client client) {
         this.client = client;
     }
 
     /**
      * Get a valid Move from the KI .
+     *
      * @param board actual board with all Pieces
      * @return a valid Move from the Server
      * @throws IOException
@@ -32,20 +33,21 @@ public class RandomPlayer extends Player {
     @Override
     Move getMove(Board board) {
         LinkedList<Move> moves = board.genMoves();
-        int random =new Random().nextInt(moves.size());
+        int random = new Random().nextInt(moves.size());
         Move move = moves.get(random);
-        client.send(move.toString(),false);
+        client.send(move.toString(), false);
         return move;
     }
 
     /**
      * Print the actuval move with the actual state of the board after the move.
+     *
      * @param board actual board
-     * @param move actual Move from the KI
+     * @param move  actual Move from the KI
      */
     @Override
     void print(Board board, Move move) {
-        System.out.println(move + " Random\n"+board);
+        System.out.println(move + " Random\n" + board);
     }
 
 }

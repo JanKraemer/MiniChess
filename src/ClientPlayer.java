@@ -1,4 +1,5 @@
 import java.io.IOException;
+
 /**
  * Copyright © 2017 Jan Krämer
  * <p>
@@ -16,12 +17,13 @@ public class ClientPlayer extends Player {
 
     private Client client;
 
-    public ClientPlayer(Client client){
+    public ClientPlayer(Client client) {
         this.client = client;
     }
 
     /**
      * Get a valid Move from the Server .
+     *
      * @param board actual board with all Pieces
      * @return a valid Move from the Server
      * @throws IOException
@@ -30,15 +32,16 @@ public class ClientPlayer extends Player {
     Move getMove(Board board) throws IOException {
         String response = "";
         response = client.getMove();
-        if(response != null)
+        if (response != null)
             return new Move(response);
-        return  null;
+        return null;
     }
 
     /**
      * Print the actuval move with the actual state of the board after the move.
+     *
      * @param board actual board
-     * @param move actual Move from the player
+     * @param move  actual Move from the player
      */
     @Override
     void print(Board board, Move move) {
