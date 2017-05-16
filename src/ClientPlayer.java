@@ -20,6 +20,12 @@ public class ClientPlayer extends Player {
         this.client = client;
     }
 
+    /**
+     * Get a valid Move from the Server .
+     * @param board actual board with all Pieces
+     * @return a valid Move from the Server
+     * @throws IOException
+     */
     @Override
     Move getMove(Board board) throws IOException {
         String response = "";
@@ -29,6 +35,11 @@ public class ClientPlayer extends Player {
         return  null;
     }
 
+    /**
+     * Print the actuval move with the actual state of the board after the move.
+     * @param board actual board
+     * @param move actual Move from the player
+     */
     @Override
     void print(Board board, Move move) {
         System.out.println(move + " Client\n" + board);

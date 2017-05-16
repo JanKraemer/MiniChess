@@ -22,6 +22,12 @@ public class HumanPlayer extends Player {
         scanner = new Scanner(System.in);
     }
 
+    /**
+     * Get a Move from a Human Player.
+     * @param board actual board with all Pieces
+     * @return a valid Move from the Server
+     *
+     */
     @Override
     Move getMove(Board board) {
         String input;
@@ -39,11 +45,22 @@ public class HumanPlayer extends Player {
         return move;
     }
 
+    /**
+     * Print the actuval move with the actual state of the board after the move.
+     * @param board actual board
+     * @param move actual Move from the player
+     */
     @Override
     void print(Board board, Move move) {
         System.out.println(move + " Human\n"+board);
     }
 
+    /**
+     * Checks if the user input move is in the list of all possible moves.
+     * @param moves all possibles moves for this piece
+     * @param input the move from the user
+     * @return
+     */
     private boolean isLegalMove(LinkedList<Move> moves, Move input) {
         for (Move move : moves) {
             if (areMovesEqual(move,input)){
@@ -53,6 +70,12 @@ public class HumanPlayer extends Player {
         return false;
     }
 
+    /**
+     * Check if both moves have the some coordination pairs.
+     * @param move move to check
+     * @param input move from user input
+     * @return
+     */
     private boolean areMovesEqual(Move move, Move input) {
         return move.getFrom().getRow() == input.getFrom().getRow() &&
                 move.getFrom().getCol() == input.getFrom().getCol() &&

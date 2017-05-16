@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -22,6 +23,12 @@ public class RandomPlayer extends Player {
         this.client = client;
     }
 
+    /**
+     * Get a valid Move from the KI .
+     * @param board actual board with all Pieces
+     * @return a valid Move from the Server
+     * @throws IOException
+     */
     @Override
     Move getMove(Board board) {
         LinkedList<Move> moves = board.genMoves();
@@ -30,6 +37,12 @@ public class RandomPlayer extends Player {
         client.send(move.toString(),false);
         return move;
     }
+
+    /**
+     * Print the actuval move with the actual state of the board after the move.
+     * @param board actual board
+     * @param move actual Move from the KI
+     */
     @Override
     void print(Board board, Move move) {
         System.out.println(move + " Random\n"+board);
