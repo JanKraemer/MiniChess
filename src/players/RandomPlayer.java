@@ -22,14 +22,16 @@ import java.util.Random;
  */
 public class RandomPlayer extends Player {
 
-    private Client client;
-
-    public RandomPlayer(Client client) {
-        this.client = client;
-    }
-
     public RandomPlayer() {
 
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     /**

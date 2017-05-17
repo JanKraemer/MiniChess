@@ -20,9 +20,15 @@ import java.io.IOException;
  */
 public class ClientPlayer extends Player {
 
-    private Client client;
+    public ClientPlayer() {
 
-    public ClientPlayer(Client client) {
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
         this.client = client;
     }
 

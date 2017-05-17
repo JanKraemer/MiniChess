@@ -24,15 +24,17 @@ import java.util.LinkedList;
 public class NegamaxPlayer extends Player {
 
     private int deep;
-    private Client client;
 
     public NegamaxPlayer(int deep) {
-        this(deep, null);
+        this.deep = deep;
     }
 
-    public NegamaxPlayer(int deep, Client client) {
+    public void setClient(Client client) {
         this.client = client;
-        this.deep = deep;
+    }
+
+    public Client getClient() {
+        return client;
     }
 
     @Override

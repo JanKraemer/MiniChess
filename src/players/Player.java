@@ -24,6 +24,16 @@ import java.io.IOException;
  */
 public abstract class Player {
 
+    Client client;
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
     /**
      * Get a valid gamecomponents.Move from the player.
      *
