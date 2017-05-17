@@ -58,16 +58,14 @@ public class Game {
         }
     }
 
-    public void startForRounds(int rounds)throws IOException {
+    public int[] startForRounds(int rounds)throws IOException {
         int[] score = new int[3];
         int index = 0;
         while (index++ < rounds) {
             Board board = new Board();
             playGame(board, score);
         }
-        System.out.println(score[0] + " W WINS");
-        System.out.println(score[1] + " B WINS");
-        System.out.println(score[2] + " DRAWS");
+        return score;
     }
 
     private int[] playGame(Board board, int[] count) throws IOException {

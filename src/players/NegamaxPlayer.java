@@ -7,6 +7,7 @@ import gamecomponents.StateEvaluator;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Random;
 
 /**
  * Copyright © 2017 Jan Krämer
@@ -61,12 +62,16 @@ public class NegamaxPlayer extends Player {
                 FutureMove next = getNextMoveAlgorithm(copy, deep - 1);
                 value = (-1) * next.getScore();
             }
-            if (value > move.getScore()) {
+            if (value > move.getScore() || ( value == move.getScore() && randomFunction())) {
                 move.setMove(actualMove);
                 move.setScore(value);
             }
         }
         return move;
+    }
+
+    private boolean randomFunction() {
+        return new Random().nextInt(3) == 0 ? true : false;
     }
 
 

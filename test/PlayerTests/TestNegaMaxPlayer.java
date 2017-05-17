@@ -18,7 +18,6 @@ public class TestNegaMaxPlayer {
     public  void testNegamaxPlayer() throws IOException{
         Board board = new Board(generateTestValue());
         Player player = new NegamaxPlayer(3);
-        System.out.println(board);
 
         Move move = player.getMove(board);
         Assert.assertEquals("b4-c2",move.toString());

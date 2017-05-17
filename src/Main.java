@@ -38,7 +38,7 @@ public class Main {
 
         Game game = Game.getInstance()
                 .withClient(args)
-                .setPlayer(new NegamaxPlayer(4))
+                .setPlayer(new NegamaxPlayer(5))
                 .finish();
         try{
            game.startNetworkGame();

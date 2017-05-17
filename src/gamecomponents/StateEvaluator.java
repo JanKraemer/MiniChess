@@ -23,8 +23,8 @@ public class StateEvaluator {
 
     static int prawn = 1;
     static int rook = 2;
-    static int knight = 3;
-    static int bishop = 4;
+    static int knight = 4;
+    static int bishop = 6;
     static int queen = 9;
     static int king = 1000;
 
