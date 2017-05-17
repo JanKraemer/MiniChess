@@ -39,14 +39,21 @@ public class Game {
      * @param args given Arguments from the user
      */
     public static void main(String[] args) {
-        initComponents(args);
+        //initComponents(args);
         try {
-            initClient();
+            //   initClient();
             setPlayers();
-            Board board = new Board();
-            System.out.println(board);
-            playGame(board);
+            int index = 0;
+            int[] score = new int[3];
+            while (index++ < 20) {
+                Board board = new Board();
+                //   System.out.println(board);
+                playGame(board, score);
+            }
 
+            System.out.println(score[0] + " B WINS");
+            System.out.println(score[1] + " W WINS");
+            System.out.println(score[2] + " DRAWS");
         } catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -58,28 +65,36 @@ public class Game {
      * @param board startBoard
      * @throws IOException
      */
-    private static void playGame(Board board) throws IOException {
-        while (true) {
+    private static int[] playGame(Board board, int[] score) throws IOException {
+        char value = '?';
+        while (value == '?') {
             Player actual = players.get(board.getOnMove());
             Move move = actual.getMove(board);
             if (move == null)
                 break;
-            board.move(move);
-            actual.print(board, move);
+            value = board.move(move);
+            //  actual.print(board, move);
         }
+        if (value == 'B')
+            score[0]++;
+        if (value == 'W')
+            score[1]++;
+        if (value == '=')
+            score[2]++;
+        return score;
     }
 
     /**
      * Add Players to HashMap with their Color as Key.
      */
     private static void setPlayers() {
-        char otherColor = 'W';
+     /*   char otherColor = 'W';
         if (color == otherColor)
             otherColor = 'B';
         players.put(otherColor, new ClientPlayer(client));
-        players.put(color, new NegamaxPlayer(4, client));
-        //  players.put('B', new NegamaxPlayer(4));
-        //  players.put('W', new HeuristicPlayer());
+        players.put(color, new NegamaxPlayer(5, client));*/
+        players.put('B', new NegamaxPlayer(2));
+        players.put('W', new HeuristicPlayer());
     }
 
     /**

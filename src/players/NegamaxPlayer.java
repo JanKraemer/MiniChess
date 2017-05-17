@@ -38,7 +38,7 @@ public class NegamaxPlayer extends Player {
     @Override
     public Move getMove(Board board) throws IOException {
         FutureMove move = getNextMoveAlgorithm(board, this.deep);
-        client.send(move.getMove().toString(), false);
+     //   client.send(move.getMove().toString(), false);
         return move.getMove();
     }
 
