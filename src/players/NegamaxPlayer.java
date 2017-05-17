@@ -57,7 +57,7 @@ public class NegamaxPlayer extends Player {
             copy.move(actualMove);
             int value_ = StateEvaluator.validateState(copy) * (-1);
             if (value_ > 500 || value_ < -500) {
-                return new FutureMove(value_, actualMove);
+                value = value_;
             } else {
                 FutureMove next = getNextMoveAlgorithm(copy, deep - 1);
                 value = (-1) * next.getScore();
@@ -71,7 +71,7 @@ public class NegamaxPlayer extends Player {
     }
 
     private boolean randomFunction() {
-        return new Random().nextInt(3) == 0 ? true : false;
+        return new Random().nextInt(4) == 0 ? true : false;
     }
 
 
