@@ -1,4 +1,4 @@
-// Copyright (c) 2012 Bart Massey <bart@cs.pdx.edu>
+package players;// Copyright (c) 2012 Bart Massey <bart@cs.pdx.edu>
 // Licensed under the "MIT License"
 // Please see the file COPYING at http://github.com/BartMassey/imcs
 
@@ -13,8 +13,8 @@ import java.net.*;
  * Page</a> for information.
  * The basic workflow is to create a client object connected
  * to the server, use the offer() or accept() method to
- * start a game on that client, and then use the getMove()
- * and sendMove() methods to play the game.
+ * start a gamecomponents on that client, and then use the getMove()
+ * and sendMove() methods to play the gamecomponents.
  * <p>
  * A lower-level "expect/send" interface is also provided
  * for those who want to extend the functionality of this
@@ -194,7 +194,7 @@ public class Client {
     }
 
     /**
-     * Instruct the server to offer a game to
+     * Instruct the server to offer a gamecomponents to
      * other players. If color is "?", allow the other side
      * or the server to pick the color.
      * Blocks until the offer is accepted.
@@ -218,11 +218,11 @@ public class Client {
     }
 
     /**
-     * Instruct the server to accept a game.
+     * Instruct the server to accept a gamecomponents.
      * If color is "?", allow the other side
      * or the server to pick the color.
      *
-     * @param id    game id number string
+     * @param id    gamecomponents id number string
      * @param color the color that your side wants to play
      * @return the color that your side should play
      */

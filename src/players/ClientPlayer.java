@@ -1,5 +1,9 @@
-import java.util.LinkedList;
-import java.util.Scanner;
+package players;
+
+import gamecomponents.Board;
+import gamecomponents.Move;
+
+import java.io.IOException;
 
 /**
  * Copyright © 2017 Jan Krämer
@@ -14,73 +18,38 @@ import java.util.Scanner;
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-public class HumanPlayer extends Player {
+public class ClientPlayer extends Player {
 
-    private Scanner scanner;
+    private Client client;
 
-    public HumanPlayer() {
-        scanner = new Scanner(System.in);
+    public ClientPlayer(Client client) {
+        this.client = client;
     }
 
     /**
-     * Get a Move from a Human Player.
-     * @param board actual board with all Pieces
-     * @return a valid Move from the Server
+     * Get a valid gamecomponents.Move from the Server .
      *
+     * @param board actual board with all Pieces
+     * @return a valid gamecomponents.Move from the Server
+     * @throws IOException
      */
     @Override
-    Move getMove(Board board) {
-        String input;
-        Move move = null;
-        boolean isMoveLegal = false;
-        do {
-            input = scanner.nextLine();
-            try {
-                move = new Move(input);
-                isMoveLegal = isLegalMove(board.genMoves(), move);
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            }
-        } while (!isMoveLegal);
-        return move;
+    public Move getMove(Board board) throws IOException {
+        String response = "";
+        response = client.getMove();
+        if (response != null)
+            return new Move(response);
+        return null;
     }
 
     /**
      * Print the actuval move with the actual state of the board after the move.
+     *
      * @param board actual board
-     * @param move actual Move from the player
+     * @param move  actual gamecomponents.Move from the player
      */
     @Override
-    void print(Board board, Move move) {
-        System.out.println(move + " Human\n"+board);
+    public void print(Board board, Move move) {
+        System.out.println(move + " players.Client\n" + board);
     }
-
-    /**
-     * Checks if the user input move is in the list of all possible moves.
-     * @param moves all possibles moves for this piece
-     * @param input the move from the user
-     * @return
-     */
-    private boolean isLegalMove(LinkedList<Move> moves, Move input) {
-        for (Move move : moves) {
-            if (areMovesEqual(move,input)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Check if both moves have the some coordination pairs.
-     * @param move move to check
-     * @param input move from user input
-     * @return
-     */
-    private boolean areMovesEqual(Move move, Move input) {
-        return move.getFrom().getRow() == input.getFrom().getRow() &&
-                move.getFrom().getCol() == input.getFrom().getCol() &&
-                move.getTo().getRow() == input.getTo().getRow() &&
-                move.getTo().getCol() == input.getTo().getCol();
-    }
-
 }

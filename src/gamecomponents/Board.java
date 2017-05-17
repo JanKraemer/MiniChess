@@ -1,3 +1,5 @@
+package gamecomponents;
+
 import com.sun.istack.internal.Nullable;
 
 import java.io.*;
@@ -46,7 +48,7 @@ public class Board {
         initBoard(state);
     }
 
-    public Board(Board board){
+    public Board(Board board) {
         copyValues(board);
     }
 
@@ -54,8 +56,8 @@ public class Board {
         onMove = board.getOnMove();
         movNumber = board.movNumber;
         char[][] oldboard = board.getSquares();
-        for(int y = 0; y < oldboard.length;y++){
-            for(int x = 0;x < oldboard[y].length; x++){
+        for (int y = 0; y < oldboard.length; y++) {
+            for (int x = 0; x < oldboard[y].length; x++) {
                 this.squares[y][x] = oldboard[y][x];
             }
         }
@@ -66,7 +68,7 @@ public class Board {
      * Initialise the board with / without a given state
      * if the state is null , the board will initialised with a default board.
      *
-     * @param state actual state of a game.
+     * @param state actual state of a gamecomponents.
      */
     private void initBoard(@Nullable String state) {
         if (state == null) {
@@ -82,23 +84,28 @@ public class Board {
             }
         } else {
             String[] lines = state.split("\n");
-            if (lines.length != 10)
+            if (lines.length != 9)
                 throw new IllegalArgumentException("The String has not the correct number of lines");
             String[] firstline = lines[0].split(" ");
             movNumber = Integer.valueOf(firstline[0]);
             onMove = firstline[1].charAt(0);
-            for (int line = squares.length - 1; line >= 0; line--)
-                squares[line] = lines[line + 1].toCharArray();
+            for (int y = 0; y < squares.length; y++) {
+                String[] parts = lines[y + 1].split(" | ");
+                for (int x = 0; x < squares[y].length; x++) {
+                    squares[ROWS - y - 1][x] = parts[2 + x * 2].charAt(0);
+                }
+
+            }
         }
         generateMap();
     }
 
     private char[] makeWhiteLine() {
-        return new char []{(char)(rook-32),(char)(night-32),(char)(bishop-32),(char)(queen-32),(char)(king-32)};
+        return new char[]{(char) (rook - 32), (char) (night - 32), (char) (bishop - 32), (char) (queen - 32), (char) (king - 32)};
     }
 
     private char[] makeBlackLine() {
-            return new char[]{king,queen,bishop,night,rook};
+        return new char[]{king, queen, bishop, night, rook};
     }
 
     /**
@@ -196,24 +203,26 @@ public class Board {
      */
     public char move(Move move) {
         char objekt = squares[move.getFrom().getRow()][move.getFrom().getCol()];
+        char nextPosition = squares[move.getTo().getRow()][move.getTo().getCol()];
         updateOwnList(move);
         updateEnemyList(move.getTo());
         squares[move.getFrom().getRow()][move.getFrom().getCol()] = '.';
-        if (isSquareKing(squares[move.getTo().getRow()][move.getTo().getCol()])) {
-            squares[move.getTo().getRow()][move.getTo().getCol()] = objekt;
-            return onMove;
-        }
-        squares[move.getTo().getRow()][move.getTo().getCol()] = objekt;
-        if (isPrawn(objekt) && isPrawnOnEdge(move.getTo().getRow())) {
-            squares[move.getTo().getRow()][move.getTo().getCol()]++;
-        }
         if (onMove == 'W') {
             onMove = 'B';
         } else {
             onMove = 'W';
             movNumber++;
         }
-
+        squares[move.getTo().getRow()][move.getTo().getCol()] = objekt;
+        if (isSquareKing(nextPosition)) {
+            if (onMove == 'W') {
+                return 'B';
+            }
+            return 'W';
+        }
+        if (isPrawn(objekt) && isPrawnOnEdge(move.getTo().getRow())) {
+            squares[move.getTo().getRow()][move.getTo().getCol()]++;
+        }
         if (movNumber == 41)
             return '=';
 
@@ -223,7 +232,7 @@ public class Board {
     /**
      * updating the oponents Arraylist of Squares.
      *
-     * @param to Move
+     * @param to gamecomponents.Move
      */
     private void updateEnemyList(Square to) {
         char enemy = 'B';
@@ -300,7 +309,7 @@ public class Board {
                 return this.move(actualMove);
             }
         }
-        throw new IllegalArgumentException("Move is not possible!");
+        throw new IllegalArgumentException("gamecomponents.Move is not possible!");
 
     }
 
@@ -325,7 +334,7 @@ public class Board {
     /**
      * Check if the actual position is not a free place
      *
-     * @param from Square with the actual position
+     * @param from gamecomponents.Square with the actual position
      * @return boolean with result
      */
     private boolean isNotFree(Square from) {
@@ -367,17 +376,27 @@ public class Board {
         return false;
     }
 
+    public static int getCOLUMNS() {
+        return COLUMNS;
+    }
+
     /**
      * generate a special TestValue
      *
      * @return
      */
-    private static String generateTestValue() {
-        String firstline = "1 B\n";
-        String[] field = {".....", ".....", ".....", ".....", "....p", "...K."};
+    public static String generateTestValue() {
+        String[] field = {"1 B",
+                "6 | k | q | b | n | r | ",
+                "5 | p | Q | p | p | p | ",
+                "4 | . | . | . | . | . | ",
+                "3 | . | . | . | . | . | ",
+                "2 | P | P | P | P | P | ",
+                "1 | R | N | B | q | K | ",
+                "----------------------- ",
+                "  | a | b | c | d | e | "};
         StringBuilder builder = new StringBuilder();
-        builder.append(firstline);
-        for (int i = field.length - 1; i >= 0; i--) {
+        for (int i = 0; i < field.length; i++) {
             builder.append(field[i] + "\n");
         }
 
@@ -393,20 +412,20 @@ public class Board {
     }
 
     /**
-     * Test method for the Board
+     * Test method for the gamecomponents.Board
      *
      * @param args
      */
     public static void main(String[] args) {
-        Board oldboard = new Board();
+        Board oldboard = new Board(generateTestValue());
         System.out.println(oldboard);
-        Board board = new Board(oldboard);
+        //   gamecomponents.Board board = new gamecomponents.Board(oldboard);
 
-        board.move("a2-a3");
-        System.out.println(board);
-        System.out.println(oldboard);
-        // LinkedList<Move> moves = board.genMoves();
-        //   for (Square current : board.getMap().get(board.onMove)) {
+        //   board.move("a2-a3");
+        //   System.out.println(board);
+        //  System.out.println(oldboard);
+        // LinkedList<gamecomponents.Move> moves = board.genMoves();
+        //   for (gamecomponents.Square current : board.getMap().get(board.onMove)) {
         //       System.out.println(current);
         //   }
     }

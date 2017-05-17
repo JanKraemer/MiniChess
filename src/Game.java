@@ -1,3 +1,10 @@
+import gamecomponents.Board;
+import gamecomponents.Move;
+import players.Client;
+import players.HeuristicPlayer;
+import players.Player;
+import players.RandomPlayer;
+
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -30,22 +37,27 @@ public class Game {
     public static char color;
 
     /**
-     * Main Methode for a game
+     * Main Methode for a gamecomponents
      *
      * @param args given Arguments from the user
      */
     public static void main(String[] args) {
-      //  initComponents(args);
+        //  initComponents(args);
         try {
-           // initClient();
-            setPlayers();
+            // initClient();
+            int[] check = new int[3];
             int index = 1;
-            while( index < 2){
+            while(index <= 100){
+                setPlayers();
                 Board board = new Board();
-                System.out.println(board);
-                playGame(board, index++);
+                // System.out.println(board);
+                check =playGame(board, check);
+                index++;
             }
 
+            System.out.println("B Wins " +check[0]);
+            System.out.println("W Wins " +check[1]);
+            System.out.println("Draw " +check[2]);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -57,19 +69,28 @@ public class Game {
      * @param board startBoard
      * @throws IOException
      */
-    private static void playGame(Board board, int index) throws IOException {
+    private static int[] playGame(Board board, int[] check) throws IOException {
         //System.out.println(board);
         char value = '?';
         while (value == '?') {
-        //while(true){
+            //while(true){
             Player actual = players.get(board.getOnMove());
             Move move = actual.getMove(board);
             if (move == null)
                 break;
             value = board.move(move);
-            //actual.print(board, move);
+
+           // actual.print(board, move);
         }
-        System.out.println(index+" "+value);
+        if(value == 'B'){
+            check[0]++;
+        }else if(value == 'W'){
+            check[1]++;
+        }else {
+            check[2]++;
+        }
+        return check;
+
     }
 
     /**
@@ -79,10 +100,10 @@ public class Game {
      /*   char otherColor = 'W';
         if (color == otherColor)
             otherColor = 'B';*/
-       // players.put(othercolor, new ClientPlayer(client));
-        // players.put(color,new RandomPlayer(client))
-        players.put('B', new RandomPlayer());
-        players.put('W',new RandomPlayer());
+        // players.put(othercolor, new players.ClientPlayer(client));
+        // players.put(color,new players.RandomPlayer(client))
+        players.put('B', new HeuristicPlayer());
+        players.put('W', new HeuristicPlayer());
     }
 
     /**
@@ -102,7 +123,7 @@ public class Game {
     }
 
     /**
-     * Initialise the Client depending on the input.
+     * Initialise the players.Client depending on the input.
      *
      * @throws IOException
      */

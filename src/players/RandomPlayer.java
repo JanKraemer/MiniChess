@@ -1,4 +1,11 @@
+package players;
+
+import gamecomponents.Board;
+import gamecomponents.Move;
+
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Random;
 
 /**
  * Copyright © 2017 Jan Krämer
@@ -13,38 +20,43 @@ import java.io.IOException;
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-public class ClientPlayer extends Player {
+public class RandomPlayer extends Player {
 
     private Client client;
 
-    public ClientPlayer(Client client) {
+    public RandomPlayer(Client client) {
         this.client = client;
     }
 
+    public RandomPlayer(){
+
+    }
+
     /**
-     * Get a valid Move from the Server .
+     * Get a valid gamecomponents.Move from the KI .
      *
      * @param board actual board with all Pieces
-     * @return a valid Move from the Server
+     * @return a valid gamecomponents.Move from the Server
      * @throws IOException
      */
     @Override
-    Move getMove(Board board) throws IOException {
-        String response = "";
-        response = client.getMove();
-        if (response != null)
-            return new Move(response);
-        return null;
+    public Move getMove(Board board) {
+        LinkedList<Move> moves = board.genMoves();
+        int random = new Random().nextInt(moves.size());
+        Move move = moves.get(random);
+     //   client.send(move.toString(), false);
+        return move;
     }
 
     /**
      * Print the actuval move with the actual state of the board after the move.
      *
      * @param board actual board
-     * @param move  actual Move from the player
+     * @param move  actual gamecomponents.Move from the KI
      */
     @Override
-    void print(Board board, Move move) {
-        System.out.println(move + " Client\n" + board);
+    public void print(Board board, Move move) {
+        System.out.println(move + " Random\n" + board);
     }
+
 }

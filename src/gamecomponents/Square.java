@@ -1,3 +1,5 @@
+package gamecomponents;
+
 /**
  * Copyright © 2017 Jan Krämer
  * <p>
@@ -11,44 +13,55 @@
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-public class Move {
+public class Square {
 
-    private Square from, to;
+    private int col;
+    private int row;
 
-    public Move(String string) {
-        String[] elements = string.split("-");
-        from = new Square(elements[0]);
-        to = new Square(elements[1]);
+    public Square() {
+        col = row = 0;
     }
 
-    public Move(Square from, Square to) {
-        this.from = from;
-        this.to = to;
+    public Square(String field) {
+        col = field.charAt(0) - 'a';
+        row = field.charAt(1) - '1';
     }
 
-    @Override
+    public Square(int col, int row) {
+        this.col = col;
+        this.row = row;
+    }
+
     public String toString() {
-        return from.toString() + "-" + to.toString();
+        return (char) (col + 'a') + "" + (char) (row + '1');
     }
 
-    public Square getFrom() {
-        return from;
+    public int getCol() {
+        return col;
     }
 
-    public Square getTo() {
-        return to;
+    public int getRow() {
+        return row;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
     }
 
     /**
-     * Main method for testing the Constructor with two Square objects.
+     * Main Methode using for testing the Constructors of the class.
      *
      * @param args
      */
     public static void main(String[] args) {
-        Move move = new Move(new Square(0, 1), new Square(0, 2));
-        System.out.println(move);
-        move = new Move(new Square(1, 1), new Square(2, 2));
-        System.out.println(move);
+        Square square = new Square("a4");
+        System.out.println(square);
+        square = new Square(0, 3);
+        System.out.println(square);
     }
-
 }
+

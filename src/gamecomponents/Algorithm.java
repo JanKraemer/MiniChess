@@ -1,3 +1,8 @@
+package gamecomponents;
+
+import gamecomponents.Board;
+import gamecomponents.Square;
+
 import java.util.LinkedList;
 
 /**

@@ -1,8 +1,10 @@
-import sun.awt.image.ImageWatched;
+package players;
 
-import java.io.IOException;
+import gamecomponents.Board;
+import gamecomponents.Move;
+
 import java.util.LinkedList;
-import java.util.Random;
+import java.util.Scanner;
 
 /**
  * Copyright © 2017 Jan Krämer
@@ -17,63 +19,73 @@ import java.util.Random;
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-public class HeuristicPlayer extends Player {
+public class HumanPlayer extends Player {
 
-    private Client client;
+    private Scanner scanner;
 
-    public HeuristicPlayer(Client client) {
-        this.client = client;
-    }
-
-    public HeuristicPlayer(){
-
+    public HumanPlayer() {
+        scanner = new Scanner(System.in);
     }
 
     /**
-     * Get a valid Move from the KI .
-     *
+     * Get a gamecomponents.Move from a Human players.Player.
      * @param board actual board with all Pieces
-     * @return a valid Move from the Server
-     * @throws IOException
+     * @return a valid gamecomponents.Move from the Server
+     *
      */
     @Override
-    Move getMove(Board board) {
-        LinkedList<Move> moves =  getBestMove(board,board.genMoves());
-        int random = new Random().nextInt(moves.size());
-        Move move = moves.get(random);
-        //   client.send(move.toString(), false);
-        return move;
-    }
-
-    private LinkedList<Move> getBestMove(Board board, LinkedList<Move> moves) {
-        int score = Integer.MIN_VALUE;
-        int actualScore = 0;
-        LinkedList<Move> possiblesMoves = new LinkedList<>();
-        for(Move actualMove : moves){
-            Board testBoard = new Board(board);
-            testBoard.move(actualMove);
-            actualScore =- StateEvaluator.validateState(testBoard);
-            if( actualScore > score){
-                possiblesMoves.clear();
-                score = actualScore;
-                possiblesMoves.add(actualMove);
-            }else if( score == actualScore){
-                possiblesMoves.add(actualMove);
+    public Move getMove(Board board) {
+        String input;
+        Move move = null;
+        boolean isMoveLegal = false;
+        do {
+            input = scanner.nextLine();
+            try {
+                move = new Move(input);
+                isMoveLegal = isLegalMove(board.genMoves(), move);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
             }
-        }
-        return possiblesMoves;
+        } while (!isMoveLegal);
+        return move;
     }
 
     /**
      * Print the actuval move with the actual state of the board after the move.
-     *
      * @param board actual board
-     * @param move  actual Move from the KI
+     * @param move actual gamecomponents.Move from the player
      */
     @Override
-    void print(Board board, Move move) {
-        System.out.println(move + " Heuristic\n" + board);
+    public void print(Board board, Move move) {
+        System.out.println(move + " Human\n"+board);
+    }
+
+    /**
+     * Checks if the user input move is in the list of all possible moves.
+     * @param moves all possibles moves for this piece
+     * @param input the move from the user
+     * @return
+     */
+    private boolean isLegalMove(LinkedList<Move> moves, Move input) {
+        for (Move move : moves) {
+            if (areMovesEqual(move,input)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if both moves have the some coordination pairs.
+     * @param move move to check
+     * @param input move from user input
+     * @return
+     */
+    private boolean areMovesEqual(Move move, Move input) {
+        return move.getFrom().getRow() == input.getFrom().getRow() &&
+                move.getFrom().getCol() == input.getFrom().getCol() &&
+                move.getTo().getRow() == input.getTo().getRow() &&
+                move.getTo().getCol() == input.getTo().getCol();
     }
 
 }
-
