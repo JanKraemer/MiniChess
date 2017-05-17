@@ -84,13 +84,13 @@ public class Board {
             }
         } else {
             String[] lines = state.split("\n");
-            if (lines.length != 9)
+            if (lines.length != 10)
                 throw new IllegalArgumentException("The String has not the correct number of lines");
             String[] firstline = lines[0].split(" ");
             movNumber = Integer.valueOf(firstline[0]);
             onMove = firstline[1].charAt(0);
             for (int y = 0; y < squares.length; y++) {
-                String[] parts = lines[y + 1].split(" | ");
+                String[] parts = lines[y + 2].split(" | ");
                 for (int x = 0; x < squares[y].length; x++) {
                     squares[ROWS - y - 1][x] = parts[2 + x * 2].charAt(0);
                 }
@@ -174,7 +174,7 @@ public class Board {
             }
             builder.append("\n");
         }
-        builder.append("-----------------------\n");
+        builder.append("----------------------- \n");
         builder.append("  | a | b | c | d | e | \n");
         return builder.toString();
     }
@@ -380,28 +380,7 @@ public class Board {
         return COLUMNS;
     }
 
-    /**
-     * generate a special TestValue
-     *
-     * @return
-     */
-    public static String generateTestValue() {
-        String[] field = {"1 B",
-                "6 | k | q | b | n | r | ",
-                "5 | p | Q | p | p | p | ",
-                "4 | . | . | . | . | . | ",
-                "3 | . | . | . | . | . | ",
-                "2 | P | P | P | P | P | ",
-                "1 | R | N | B | q | K | ",
-                "----------------------- ",
-                "  | a | b | c | d | e | "};
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < field.length; i++) {
-            builder.append(field[i] + "\n");
-        }
 
-        return builder.toString();
-    }
 
     public char getOnMove() {
         return onMove;
@@ -411,22 +390,4 @@ public class Board {
         return squares;
     }
 
-    /**
-     * Test method for the gamecomponents.Board
-     *
-     * @param args
-     */
-    public static void main(String[] args) {
-        Board oldboard = new Board(generateTestValue());
-        System.out.println(oldboard);
-        //   gamecomponents.Board board = new gamecomponents.Board(oldboard);
-
-        //   board.move("a2-a3");
-        //   System.out.println(board);
-        //  System.out.println(oldboard);
-        // LinkedList<gamecomponents.Move> moves = board.genMoves();
-        //   for (gamecomponents.Square current : board.getMap().get(board.onMove)) {
-        //       System.out.println(current);
-        //   }
-    }
 }

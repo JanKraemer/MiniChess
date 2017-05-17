@@ -28,7 +28,7 @@ public class RandomPlayer extends Player {
         this.client = client;
     }
 
-    public RandomPlayer(){
+    public RandomPlayer() {
 
     }
 
@@ -44,7 +44,8 @@ public class RandomPlayer extends Player {
         LinkedList<Move> moves = board.genMoves();
         int random = new Random().nextInt(moves.size());
         Move move = moves.get(random);
-     //   client.send(move.toString(), false);
+        if (client != null)
+            client.send(move.toString(), false);
         return move;
     }
 

@@ -30,7 +30,7 @@ public class HeuristicPlayer extends Player {
         this.client = client;
     }
 
-    public HeuristicPlayer(){
+    public HeuristicPlayer() {
 
     }
 
@@ -43,10 +43,11 @@ public class HeuristicPlayer extends Player {
      */
     @Override
     public Move getMove(Board board) {
-        LinkedList<Move> moves =  getBestMove(board,board.genMoves());
+        LinkedList<Move> moves = getBestMove(board, board.genMoves());
         int random = new Random().nextInt(moves.size());
         Move move = moves.get(random);
-        //   client.send(move.toString(), false);
+        if (client != null)
+            client.send(move.toString(), false);
         return move;
     }
 
@@ -54,15 +55,15 @@ public class HeuristicPlayer extends Player {
         int score = Integer.MIN_VALUE;
         int actualScore = 0;
         LinkedList<Move> possiblesMoves = new LinkedList<>();
-        for(Move actualMove : moves){
+        for (Move actualMove : moves) {
             Board testBoard = new Board(board);
             testBoard.move(actualMove);
-            actualScore =- StateEvaluator.validateState(testBoard);
-            if( actualScore > score){
+            actualScore = -StateEvaluator.validateState(testBoard);
+            if (actualScore > score) {
                 possiblesMoves.clear();
                 score = actualScore;
                 possiblesMoves.add(actualMove);
-            }else if( score == actualScore){
+            } else if (score == actualScore) {
                 possiblesMoves.add(actualMove);
             }
         }
