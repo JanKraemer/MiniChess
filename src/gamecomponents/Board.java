@@ -163,6 +163,10 @@ public class Board {
         }
     }
 
+    public int getMovNumber() {
+        return movNumber;
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder()

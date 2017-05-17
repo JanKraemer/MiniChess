@@ -56,4 +56,33 @@ public class GameTest {
         int[] result = game.startForRounds(25);
         Assert.assertTrue(result[0]== 25 );
     }
+    @Test
+    public void testNegaMaxPlayerDeepFourAgainTwo() throws IOException{
+        Game game = Game
+                .getInstance()
+                .withoutClient()
+                .setPlayers(new NegamaxPlayer(4),new NegamaxPlayer(2))
+                .finish();
+
+        int[] result = game.startForRounds(10);
+        System.out.println(result[0]);
+        System.out.println(result[1]);
+        System.out.println(result[2]);
+
+    }
+
+    @Test
+    public void test2VS4Nega() throws IOException{
+        Game game = Game
+                .getInstance()
+                .withoutClient()
+                .setPlayers(new NegamaxPlayer(2),new NegamaxPlayer(4))
+                .finish();
+
+        int[] result = game.startForRounds(10);
+        System.out.println(result[0]);
+        System.out.println(result[1]);
+        System.out.println(result[2]);
+
+    }
 }

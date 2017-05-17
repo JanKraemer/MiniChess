@@ -84,6 +84,7 @@ public class Game {
             count[1]++;
         if (value == '=')
             count[2]++;
+
         return count;
     }
 
