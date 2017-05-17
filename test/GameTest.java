@@ -50,7 +50,7 @@ public class GameTest {
         Game game = Game
                 .getInstance()
                 .withoutClient()
-                .setPlayers(new NegamaxPlayer(4),new RandomPlayer())
+                .setPlayers(new NegamaxPlayer(4),new HeuristicPlayer())
                 .finish();
 
         int[] result = game.startForRounds(25);
