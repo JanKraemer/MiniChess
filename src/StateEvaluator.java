@@ -1,6 +1,5 @@
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Copyright © 2017 Jan Krämer
@@ -15,43 +14,50 @@ import java.util.Random;
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-public class RandomPlayer extends Player {
 
-    private Client client;
+public class StateEvaluator {
 
-    public RandomPlayer(Client client) {
-        this.client = client;
+    static int prawn = 1;
+    static int rook = 2;
+    static int knight = 3;
+    static int bishop = 4;
+    static int queen = 9;
+    static int king = 1000;
+
+    public static int validateState(Board board) {
+        Map<Character, ArrayList<Square>> pieces = board.getMap();
+        char actualPlayerColor = board.getOnMove();
+        char nextPlayerColor = 'W';
+        if (actualPlayerColor == nextPlayerColor)
+            nextPlayerColor = 'B';
+        int actualPlayerScore = calcScore(board.getSquares(), pieces.get(actualPlayerColor));
+        int nextPlayScore = calcScore(board.getSquares(), pieces.get(nextPlayerColor));
+        return actualPlayerScore - nextPlayScore;
     }
 
-    public RandomPlayer(){
-
+    private static int calcScore(char[][] squares, ArrayList<Square> allPostitions) {
+        int score = 0;
+        for (Square square : allPostitions) {
+            score += getScoreFromPosition(squares[square.getRow()][square.getCol()]);
+        }
+        return score;
     }
 
-    /**
-     * Get a valid Move from the KI .
-     *
-     * @param board actual board with all Pieces
-     * @return a valid Move from the Server
-     * @throws IOException
-     */
-    @Override
-    Move getMove(Board board) {
-        LinkedList<Move> moves = board.genMoves();
-        int random = new Random().nextInt(moves.size());
-        Move move = moves.get(random);
-     //   client.send(move.toString(), false);
-        return move;
-    }
+    private static int getScoreFromPosition(char c) {
+        if( c == 'p' || c == 'P')
+            return prawn;
+        else if( c == 'r' || c == 'R')
+            return rook;
+        else if( c == 'n' || c == 'N')
+            return knight;
+        else if ( c == 'b' || c == 'B')
+            return bishop;
+        else if (c == 'k' || c == 'K')
+            return king;
+        else if ( c == 'q' || c == 'Q')
+            return queen;
 
-    /**
-     * Print the actuval move with the actual state of the board after the move.
-     *
-     * @param board actual board
-     * @param move  actual Move from the KI
-     */
-    @Override
-    void print(Board board, Move move) {
-        System.out.println(move + " Random\n" + board);
+        return 0;
     }
 
 }

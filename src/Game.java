@@ -35,12 +35,16 @@ public class Game {
      * @param args given Arguments from the user
      */
     public static void main(String[] args) {
-        initComponents(args);
-        Board board = new Board();
+      //  initComponents(args);
         try {
-            initClient();
+           // initClient();
             setPlayers();
-            playGame(board);
+            int index = 1;
+            while( index < 2){
+                Board board = new Board();
+                System.out.println(board);
+                playGame(board, index++);
+            }
 
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -53,27 +57,32 @@ public class Game {
      * @param board startBoard
      * @throws IOException
      */
-    private static void playGame(Board board) throws IOException {
-        System.out.println(board);
-        while (true) {
+    private static void playGame(Board board, int index) throws IOException {
+        //System.out.println(board);
+        char value = '?';
+        while (value == '?') {
+        //while(true){
             Player actual = players.get(board.getOnMove());
             Move move = actual.getMove(board);
             if (move == null)
                 break;
-            board.move(move);
-            actual.print(board, move);
+            value = board.move(move);
+            //actual.print(board, move);
         }
+        System.out.println(index+" "+value);
     }
 
     /**
      * Add Players to HashMap with their Color as Key.
      */
     private static void setPlayers() {
-        char otherColor = 'W';
+     /*   char otherColor = 'W';
         if (color == otherColor)
-            otherColor = 'B';
-        players.put(otherColor, new ClientPlayer(client));
-        players.put(color, new RandomPlayer(client));
+            otherColor = 'B';*/
+       // players.put(othercolor, new ClientPlayer(client));
+        // players.put(color,new RandomPlayer(client))
+        players.put('B', new RandomPlayer());
+        players.put('W',new RandomPlayer());
     }
 
     /**

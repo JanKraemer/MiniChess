@@ -20,12 +20,15 @@ import java.util.LinkedList;
  */
 public class Board {
 
-    public static char[] FIRSTLINE = {'k', 'q', 'b', 'n', 'r'};
-    public static char[] LASTLINE = {'R', 'N', 'B', 'Q', 'K'};
+    public static char king = 'k';
+    public static char queen = 'q';
+    public static char bishop = 'b';
+    public static char night = 'n';
+    public static char rook = 'r';
     public static char FREEPOSITION = '.';
     public static char PRAWN_BLACK = 'p';
     public static char PRAWN_WHITE = 'P';
-    private static HashMap<Character, ArrayList<Square>> map = new HashMap<Character, ArrayList<Square>>();
+    private HashMap<Character, ArrayList<Square>> map = new HashMap<Character, ArrayList<Square>>();
     public static int ROWS = 6;
     public static int COLUMNS = 5;
     private char[][] squares = new char[ROWS][COLUMNS];
@@ -43,6 +46,22 @@ public class Board {
         initBoard(state);
     }
 
+    public Board(Board board){
+        copyValues(board);
+    }
+
+    private void copyValues(Board board) {
+        onMove = board.getOnMove();
+        movNumber = board.movNumber;
+        char[][] oldboard = board.getSquares();
+        for(int y = 0; y < oldboard.length;y++){
+            for(int x = 0;x < oldboard[y].length; x++){
+                this.squares[y][x] = oldboard[y][x];
+            }
+        }
+        generateMap();
+    }
+
     /**
      * Initialise the board with / without a given state
      * if the state is null , the board will initialised with a default board.
@@ -53,17 +72,17 @@ public class Board {
         if (state == null) {
             for (int row = squares.length - 1; row >= 0; row--) {
                 if (row == squares.length - 1)
-                    squares[row] = FIRSTLINE;
+                    squares[row] = makeBlackLine();
                 else if (row == 1 || row == 4)
                     addPrawns(row);
                 else if (row == 0)
-                    squares[row] = LASTLINE;
+                    squares[row] = makeWhiteLine();
                 else
                     addFreeLine(row);
             }
         } else {
             String[] lines = state.split("\n");
-            if (lines.length != 7)
+            if (lines.length != 10)
                 throw new IllegalArgumentException("The String has not the correct number of lines");
             String[] firstline = lines[0].split(" ");
             movNumber = Integer.valueOf(firstline[0]);
@@ -72,6 +91,14 @@ public class Board {
                 squares[line] = lines[line + 1].toCharArray();
         }
         generateMap();
+    }
+
+    private char[] makeWhiteLine() {
+        return new char []{(char)(rook-32),(char)(night-32),(char)(bishop-32),(char)(queen-32),(char)(king-32)};
+    }
+
+    private char[] makeBlackLine() {
+            return new char[]{king,queen,bishop,night,rook};
     }
 
     /**
@@ -322,6 +349,7 @@ public class Board {
         return moves;
     }
 
+
     /**
      * giving a piece and check if he is on turn.
      *
@@ -370,10 +398,13 @@ public class Board {
      * @param args
      */
     public static void main(String[] args) {
-        Board board = new Board();
-        System.out.println(board);
-        //   board.move("a2-a3");
+        Board oldboard = new Board();
+        System.out.println(oldboard);
+        Board board = new Board(oldboard);
 
+        board.move("a2-a3");
+        System.out.println(board);
+        System.out.println(oldboard);
         // LinkedList<Move> moves = board.genMoves();
         //   for (Square current : board.getMap().get(board.onMove)) {
         //       System.out.println(current);

@@ -1,3 +1,5 @@
+import sun.awt.image.ImageWatched;
+
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
@@ -15,15 +17,15 @@ import java.util.Random;
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-public class RandomPlayer extends Player {
+public class HeuristicPlayer extends Player {
 
     private Client client;
 
-    public RandomPlayer(Client client) {
+    public HeuristicPlayer(Client client) {
         this.client = client;
     }
 
-    public RandomPlayer(){
+    public HeuristicPlayer(){
 
     }
 
@@ -36,11 +38,30 @@ public class RandomPlayer extends Player {
      */
     @Override
     Move getMove(Board board) {
-        LinkedList<Move> moves = board.genMoves();
+        LinkedList<Move> moves =  getBestMove(board,board.genMoves());
         int random = new Random().nextInt(moves.size());
         Move move = moves.get(random);
-     //   client.send(move.toString(), false);
+        //   client.send(move.toString(), false);
         return move;
+    }
+
+    private LinkedList<Move> getBestMove(Board board, LinkedList<Move> moves) {
+        int score = Integer.MIN_VALUE;
+        int actualScore = 0;
+        LinkedList<Move> possiblesMoves = new LinkedList<>();
+        for(Move actualMove : moves){
+            Board testBoard = new Board(board);
+            testBoard.move(actualMove);
+            actualScore =- StateEvaluator.validateState(testBoard);
+            if( actualScore > score){
+                possiblesMoves.clear();
+                score = actualScore;
+                possiblesMoves.add(actualMove);
+            }else if( score == actualScore){
+                possiblesMoves.add(actualMove);
+            }
+        }
+        return possiblesMoves;
     }
 
     /**
@@ -51,7 +72,8 @@ public class RandomPlayer extends Player {
      */
     @Override
     void print(Board board, Move move) {
-        System.out.println(move + " Random\n" + board);
+        System.out.println(move + " Heuristic\n" + board);
     }
 
 }
+
