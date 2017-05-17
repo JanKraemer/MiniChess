@@ -50,6 +50,6 @@ public class ClientPlayer extends Player {
      */
     @Override
     public void print(Board board, Move move) {
-        System.out.println(move + " players.Client\n" + board);
+        System.out.println(move + " Client\n" + board);
     }
 }

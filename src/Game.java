@@ -1,9 +1,6 @@
 import gamecomponents.Board;
 import gamecomponents.Move;
-import players.Client;
-import players.HeuristicPlayer;
-import players.Player;
-import players.RandomPlayer;
+import players.*;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -42,22 +39,14 @@ public class Game {
      * @param args given Arguments from the user
      */
     public static void main(String[] args) {
-        //  initComponents(args);
+        initComponents(args);
         try {
-            // initClient();
-            int[] check = new int[3];
-            int index = 1;
-            while(index <= 100){
-                setPlayers();
-                Board board = new Board();
-                // System.out.println(board);
-                check =playGame(board, check);
-                index++;
-            }
+            initClient();
+            setPlayers();
+            Board board = new Board();
+            System.out.println(board);
+            playGame(board);
 
-            System.out.println("B Wins " +check[0]);
-            System.out.println("W Wins " +check[1]);
-            System.out.println("Draw " +check[2]);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -69,41 +58,28 @@ public class Game {
      * @param board startBoard
      * @throws IOException
      */
-    private static int[] playGame(Board board, int[] check) throws IOException {
-        //System.out.println(board);
-        char value = '?';
-        while (value == '?') {
-            //while(true){
+    private static void playGame(Board board) throws IOException {
+        while (true) {
             Player actual = players.get(board.getOnMove());
             Move move = actual.getMove(board);
             if (move == null)
                 break;
-            value = board.move(move);
-
-           // actual.print(board, move);
+            board.move(move);
+            actual.print(board, move);
         }
-        if(value == 'B'){
-            check[0]++;
-        }else if(value == 'W'){
-            check[1]++;
-        }else {
-            check[2]++;
-        }
-        return check;
-
     }
 
     /**
      * Add Players to HashMap with their Color as Key.
      */
     private static void setPlayers() {
-     /*   char otherColor = 'W';
+        char otherColor = 'W';
         if (color == otherColor)
-            otherColor = 'B';*/
-        // players.put(othercolor, new players.ClientPlayer(client));
-        // players.put(color,new players.RandomPlayer(client))
-        players.put('B', new HeuristicPlayer());
-        players.put('W', new HeuristicPlayer());
+            otherColor = 'B';
+        players.put(otherColor, new ClientPlayer(client));
+        players.put(color, new NegamaxPlayer(4, client));
+        //  players.put('B', new NegamaxPlayer(4));
+        //  players.put('W', new HeuristicPlayer());
     }
 
     /**

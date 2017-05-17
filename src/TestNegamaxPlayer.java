@@ -1,12 +1,9 @@
-package players;
-
 import gamecomponents.Board;
-import gamecomponents.FutureMove;
 import gamecomponents.Move;
-import gamecomponents.StateEvaluator;
+import players.NegamaxPlayer;
+import players.Player;
 
 import java.io.IOException;
-import java.util.LinkedList;
 
 /**
  * Copyright © 2017 Jan Krämer
@@ -21,54 +18,31 @@ import java.util.LinkedList;
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-public class NegamaxPlayer extends Player {
+public class TestNegamaxPlayer {
 
-    private int deep;
-    private Client client;
+    public static void main(String[] args)throws IOException{
+        Board board = new Board(generateTestValue());
+        Player player = new NegamaxPlayer(3);
+        System.out.println(board);
 
-    public NegamaxPlayer(int deep) {
-        this(deep, null);
+        Move move = player.getMove(board);
+        System.out.println(move);
     }
-
-    public NegamaxPlayer(int deep, Client client) {
-        this.client = client;
-        this.deep = deep;
-    }
-
-    @Override
-    public Move getMove(Board board) throws IOException {
-        FutureMove move = getNextMoveAlgorithm(board, this.deep);
-        client.send(move.getMove().toString(), false);
-        return move.getMove();
-    }
-
-    private FutureMove getNextMoveAlgorithm(Board board, int deep) {
-        if (deep == 0)
-            return new FutureMove(StateEvaluator.validateState(board), null);
-        LinkedList<FutureMove> moves = new LinkedList<>();
-        FutureMove move = new FutureMove(Integer.MIN_VALUE, null);
-        for (Move actualMove : board.genMoves()) {
-            int value;
-            Board copy = new Board(board);
-            copy.move(actualMove);
-            int value_ = StateEvaluator.validateState(copy) * (-1);
-            if (value_ > 500 || value_ < -500) {
-                return new FutureMove(value_, actualMove);
-            } else {
-                FutureMove next = getNextMoveAlgorithm(copy, deep - 1);
-                value = (-1) * next.getScore();
-            }
-            if (value > move.getScore()) {
-                move.setMove(actualMove);
-                move.setScore(value);
-            }
+    public static String generateTestValue() {
+        String[] field = {"1 B",
+                "6 | k | q | b | . | r | ",
+                "5 | p | p | p | p | p | ",
+                "4 | . | n | . | . | . | ",
+                "3 | . | . | . | . | . | ",
+                "2 | . | . | . | . | . | ",
+                "1 | R | . | . | . | K | ",
+                "----------------------- ",
+                "  | a | b | c | d | e | "};
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < field.length; i++) {
+            builder.append(field[i] + "\n");
         }
-        return move;
-    }
 
-
-    @Override
-    public void print(Board board, Move move) {
-        System.out.println(move + " Negamx\n" + board);
+        return builder.toString();
     }
 }
