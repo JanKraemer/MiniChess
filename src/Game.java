@@ -45,6 +45,7 @@ public class Game {
             value = board.move(move);
             actual.print(board, move);
         }
+        System.out.println(value+ " WINS");
     }
 
     public void startNetworkGame()throws IOException {
@@ -76,7 +77,7 @@ public class Game {
             if (move == null)
                 break;
             value = board.move(move);
-            //  actual.print(board, move);
+            //actual.print(board, move);
         }
         if (value == 'W')
             count[0]++;

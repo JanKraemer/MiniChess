@@ -8,9 +8,6 @@ import gamecomponents.StateEvaluator;
 import java.io.IOException;
 import java.util.Random;
 
-/**
- * Created by Jan on 18.05.2017.
- */
 public class AlphaBetaPlayer extends Player {
 
     private int deep;
@@ -40,7 +37,7 @@ public class AlphaBetaPlayer extends Player {
             if (value_ > 500 || value_ < -500) {
                 score = value_;
             } else {
-                FutureMove next = alphabetanegamax(copy, deep - 1, (-1) * beta, (-1) * alpha);
+                FutureMove next = alphabetanegamax(copy, deep - 1, (-1) * alpha, (-1) * beta);
                 score = (-1) * next.getScore();
             }
             if (score > beta)

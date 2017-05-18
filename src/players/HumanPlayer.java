@@ -3,7 +3,7 @@ package players;
 import gamecomponents.Board;
 import gamecomponents.Move;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -66,7 +66,7 @@ public class HumanPlayer extends Player {
      * @param input the move from the user
      * @return
      */
-    private boolean isLegalMove(LinkedList<Move> moves, Move input) {
+    private boolean isLegalMove(ArrayList<Move> moves, Move input) {
         for (Move move : moves) {
             if (areMovesEqual(move,input)){
                 return true;

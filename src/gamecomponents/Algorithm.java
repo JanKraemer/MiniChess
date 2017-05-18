@@ -3,7 +3,7 @@ package gamecomponents;
 import gamecomponents.Board;
 import gamecomponents.Square;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 /**
  * Copyright © 2017 Jan Krämer
@@ -34,8 +34,8 @@ public class Algorithm {
      * @param column column of the piece
      * @return list of all possible Moves of these piece
      */
-    public static LinkedList<Move> moveList(Board board, int row, int column) {
-        LinkedList<Move> moves = new LinkedList<>();
+    public static ArrayList<Move> moveList(Board board, int row, int column) {
+        ArrayList<Move> moves = new ArrayList<>();
         gameBoard = board;
         char[][] square = board.getSquares();
 
@@ -129,8 +129,8 @@ public class Algorithm {
      * @param capture   enum of three states
      * @return all possilbe Moves for input
      */
-    private static LinkedList<Move> symmscan(int x, int y, int dx, int dy, boolean stopShort, Capture capture) {
-        LinkedList<Move> moves = new LinkedList<>();
+    private static ArrayList<Move> symmscan(int x, int y, int dx, int dy, boolean stopShort, Capture capture) {
+        ArrayList<Move> moves = new ArrayList<>();
         moves.addAll(scan(x, y, dx, dy, stopShort, capture));
         moves.addAll(scan(x, y, dy, -dx, stopShort, capture));
         moves.addAll(scan(x, y, -dx, -dy, stopShort, capture));
@@ -149,8 +149,8 @@ public class Algorithm {
      * @param capture   enum of three states
      * @return all possilbe Moves for input
      */
-    private static LinkedList<Move> scan(int x0, int y0, int dx, int dy, boolean stopShort, Capture capture) {
-        LinkedList<Move> moves = new LinkedList<>();
+    private static ArrayList<Move> scan(int x0, int y0, int dx, int dy, boolean stopShort, Capture capture) {
+        ArrayList<Move> moves = new ArrayList<>();
         int x = x0;
         int y = y0;
         char color = gameBoard.getOnMove();

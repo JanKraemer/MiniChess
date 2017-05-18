@@ -5,7 +5,6 @@ import com.sun.istack.internal.Nullable;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Vector;
 
 /**
@@ -164,10 +163,6 @@ public class Board {
         }
     }
 
-    public int getMovNumber() {
-        return movNumber;
-    }
-
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder()
@@ -307,7 +302,7 @@ public class Board {
         Move actualMove = new Move(move);
         if (isNotFree(actualMove.getFrom()) &&
                 isPieceFromActualColor(squares[actualMove.getFrom().getRow()][actualMove.getFrom().getCol()])) {
-            LinkedList<Move> possibleMoves = Algorithm.moveList(this,
+            ArrayList<Move> possibleMoves = Algorithm.moveList(this,
                     actualMove.getFrom().getRow(), actualMove.getFrom().getCol());
             if (isMovePossible(possibleMoves, actualMove)) {
                 return this.move(actualMove);
@@ -324,7 +319,7 @@ public class Board {
      * @param actualMove    the giving move
      * @return boolean after checking the move
      */
-    private boolean isMovePossible(LinkedList<Move> possibleMoves, Move actualMove) {
+    private boolean isMovePossible(ArrayList<Move> possibleMoves, Move actualMove) {
         if (possibleMoves != null && !possibleMoves.isEmpty()) {
             for (Move move : possibleMoves) {
                 if (move.getTo().getRow() == actualMove.getTo().getRow() &&
@@ -354,8 +349,8 @@ public class Board {
      *
      * @return List of all possible Pieces
      */
-    public LinkedList<Move> genMoves() {
-        LinkedList<Move> moves = new LinkedList<>();
+    public ArrayList<Move> genMoves() {
+        ArrayList<Move> moves = new ArrayList<>();
         for (Square actual : map.get(onMove)) {
             moves.addAll(Algorithm.moveList(this, actual.getRow(), actual.getCol()));
         }

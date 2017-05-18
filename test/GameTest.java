@@ -75,14 +75,11 @@ public class GameTest {
         Game game = Game
                 .getInstance()
                 .withoutClient()
-                .setPlayers(new NegamaxPlayer(2),new NegamaxPlayer(5))
+                .setPlayers(new NegamaxPlayer(5),new NegamaxPlayer(2))
                 .finish();
 
-        int[] result = game.startForRounds(10);
-        System.out.println(result[0]);
-        System.out.println(result[1]);
-        System.out.println(result[2]);
-
+        int[] result = game.startForRounds(1);
+        Assert.assertTrue(result[0]== 1 );
     }
 
     @Test
@@ -90,13 +87,34 @@ public class GameTest {
         Game game = Game
                 .getInstance()
                 .withoutClient()
-                .setPlayers(new RandomPlayer(),new NegamaxPlayer(6))
+                .setPlayers(new NegamaxPlayer(2),new NegamaxPlayer(4))
                 .finish();
 
         int[] result = game.startForRounds(1);
-        System.out.println(result[0]);
-        System.out.println(result[1]);
-        System.out.println(result[2]);
+        Assert.assertTrue(result[1] == 1 );
+
+    }
+    @Test
+    public void testAlphaBetaPlayer1000Times() throws IOException{
+        Game game = Game
+                .getInstance()
+                .withoutClient()
+                .setPlayers(new AlphaBetaPlayer(2),new RandomPlayer())
+                .finish();
+
+        int[] result = game.startForRounds(1000);
+        Assert.assertTrue(result[0]>= 995 );
+    }
+
+    @Test
+    public void testAlphaAgainNega() throws IOException{
+        Game game = Game
+                .getInstance()
+                .withoutClient()
+                .setPlayers(new AlphaBetaPlayer(7),new NegamaxPlayer(2))
+                .finish();
+
+        game.start();
 
     }
 }

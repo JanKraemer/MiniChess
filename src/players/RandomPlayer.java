@@ -4,7 +4,7 @@ import gamecomponents.Board;
 import gamecomponents.Move;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -43,7 +43,7 @@ public class RandomPlayer extends Player {
      */
     @Override
     public Move getMove(Board board) {
-        LinkedList<Move> moves = board.genMoves();
+        ArrayList<Move> moves = board.genMoves();
         int random = new Random().nextInt(moves.size());
         Move move = moves.get(random);
         if (client != null)

@@ -44,4 +44,15 @@ public class BoardTest {
         Assert.assertEquals(second.getOnMove(),board.getOnMove());
         Assert.assertEquals(second.toString(),board.toString());
     }
+
+    @Test
+    public void CheckTimeForCopyBoard(){
+        Board board = new Board();
+        long nano = System.nanoTime();
+        Board second = new Board(board);
+        System.out.println(System.nanoTime()-nano);
+       // Assert.assertEquals(second.getOnMove(),board.getOnMove());
+       // Assert.assertEquals(second.toString(),board.toString());
+    }
+
 }
