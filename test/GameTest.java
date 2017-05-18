@@ -76,10 +76,10 @@ public class GameTest {
         Game game = Game
                 .getInstance()
                 .withoutClient()
-                .setPlayers(new NegamaxPlayer(2),new NegamaxPlayer(4))
+                .setPlayers(new RandomPlayer(),new NegamaxPlayer(6))
                 .finish();
 
-        int[] result = game.startForRounds(10);
+        int[] result = game.startForRounds(1);
         System.out.println(result[0]);
         System.out.println(result[1]);
         System.out.println(result[2]);
