@@ -1,5 +1,7 @@
 package gamecomponents;
 
+import java.sql.SQLException;
+
 /**
  * Copyright © 2017 Jan Krämer
  * <p>
@@ -63,5 +65,23 @@ public class Square {
         square = new Square(0, 3);
         System.out.println(square);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        // self check
+        if (this == o)
+            return true;
+        // null check
+        if (o == null)
+            return false;
+        // type check and cast
+        if (getClass() != o.getClass())
+            return false;
+        Square square = (Square) o;
+        // field comparison
+        return this.getRow() == square.getRow() &&
+                this.getCol()== square.getCol();
+    }
+
 }
 
