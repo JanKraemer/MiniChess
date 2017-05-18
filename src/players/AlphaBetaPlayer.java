@@ -42,7 +42,7 @@ public class AlphaBetaPlayer extends Player {
                 score = (-1) * next.getScore();
             }
             board.rerollBoard();
-            if (score >= beta)
+            if (score > beta)
                 return new FutureMove(score, actualMove);
             if (score > alpha)
                 alpha = score;

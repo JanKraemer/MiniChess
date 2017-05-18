@@ -1,10 +1,7 @@
 
 import org.junit.Assert;
 import org.junit.Test;
-import players.AlphaBetaPlayer;
-import players.HeuristicPlayer;
-import players.NegamaxPlayer;
-import players.RandomPlayer;
+import players.*;
 
 import java.io.IOException;
 
@@ -52,11 +49,11 @@ public class GameTest {
         Game game = Game
                 .getInstance()
                 .withoutClient()
-                .setPlayers(new AlphaBetaPlayer(2),new RandomPlayer())
+                .setPlayers(new AlphaBetaPlayer(5),new RandomPlayer())
                 .finish();
 
         int[] result = game.startForRounds(100);
-        Assert.assertTrue(result[0]>= 99 );
+        Assert.assertTrue(result[0]> 50 );
     }
 
     @Test
@@ -99,7 +96,7 @@ public class GameTest {
         Game game = Game
                 .getInstance()
                 .withoutClient()
-                .setPlayers(new AlphaBetaPlayer(7),new RandomPlayer())
+                .setPlayers(new MultiPlayer(7),new RandomPlayer())
                 .finish();
 
         int[] result = game.startForRounds(1);
