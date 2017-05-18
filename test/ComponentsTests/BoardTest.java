@@ -1,6 +1,8 @@
 package ComponentsTests;
 
+import com.sun.javaws.exceptions.MissingVersionResponseException;
 import gamecomponents.Board;
+import gamecomponents.Move;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -51,8 +53,22 @@ public class BoardTest {
         long nano = System.nanoTime();
         Board second = new Board(board);
         System.out.println(System.nanoTime()-nano);
+        board.move(new Move("a2-a3"));
+        nano = System.nanoTime();
+        board.rerollBoard();
+        System.out.println(System.nanoTime()-nano);
        // Assert.assertEquals(second.getOnMove(),board.getOnMove());
        // Assert.assertEquals(second.toString(),board.toString());
     }
 
+    @Test
+    public void checkReroll(){
+        Board board = new Board();
+        String check = board.toString();
+        board.move(new Move("a2-a3"));
+        board.move(new Move("a5-a4"));
+        board.rerollBoard();
+        board.rerollBoard();
+        Assert.assertEquals(check,board.toString());
+    }
 }

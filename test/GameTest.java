@@ -64,7 +64,7 @@ public class GameTest {
         Game game = Game
                 .getInstance()
                 .withoutClient()
-                .setPlayers(new NegamaxPlayer(4),new HeuristicPlayer())
+                .setPlayers(new NegamaxPlayer(4),new RandomPlayer())
                 .finish();
 
         int[] result = game.startForRounds(25);
@@ -99,11 +99,11 @@ public class GameTest {
         Game game = Game
                 .getInstance()
                 .withoutClient()
-                .setPlayers(new AlphaBetaPlayer(2),new RandomPlayer())
+                .setPlayers(new AlphaBetaPlayer(7),new RandomPlayer())
                 .finish();
 
-        int[] result = game.startForRounds(1000);
-        Assert.assertTrue(result[0]>= 995 );
+        int[] result = game.startForRounds(1);
+        Assert.assertTrue(result[0]>= 1 );
     }
 
     @Test
