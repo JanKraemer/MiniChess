@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Vector;
 
 /**
  * Copyright © 2017 Jan Krämer
@@ -284,7 +285,6 @@ public class Board {
     private boolean isSquareKing(char c) {
         return c == 'k' || c == 'K';
     }
-
 
     /**
      * check if the Prawn reaches the opponent edge
