@@ -6,6 +6,7 @@ import gamecomponents.StateEvaluator;
 import sun.awt.image.ImageWatched;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -45,7 +46,7 @@ public class HeuristicPlayer extends Player {
      */
     @Override
     public Move getMove(Board board) {
-        LinkedList<Move> moves = getBestMove(board, board.genMoves());
+        ArrayList<Move> moves = getBestMove(board, board.genMoves());
         int random = new Random().nextInt(moves.size());
         Move move = moves.get(random);
         if (client != null)
@@ -53,10 +54,10 @@ public class HeuristicPlayer extends Player {
         return move;
     }
 
-    private LinkedList<Move> getBestMove(Board board, LinkedList<Move> moves) {
+    private ArrayList<Move> getBestMove(Board board, ArrayList<Move> moves) {
         int score = Integer.MIN_VALUE;
         int actualScore = 0;
-        LinkedList<Move> possiblesMoves = new LinkedList<>();
+        ArrayList<Move> possiblesMoves = new ArrayList<>();
         for (Move actualMove : moves) {
             Board testBoard = new Board(board);
             testBoard.move(actualMove);
