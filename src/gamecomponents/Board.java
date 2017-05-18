@@ -5,6 +5,7 @@ import com.sun.istack.internal.Nullable;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Stack;
 import java.util.Vector;
 
 /**
@@ -31,11 +32,18 @@ public class Board {
     public static char PRAWN_BLACK = 'p';
     public static char PRAWN_WHITE = 'P';
     private HashMap<Character, ArrayList<Square>> map = new HashMap<Character, ArrayList<Square>>();
+    private ArrayList<Square> white = new ArrayList<>();
+    private ArrayList<Square> black = new ArrayList<>();
     public static int ROWS = 6;
     public static int COLUMNS = 5;
     private char[][] squares = new char[ROWS][COLUMNS];
     private int movNumber;
     private char onMove;
+    private Stack<Move> lastMove = new Stack<>();
+    private Stack<Character> lastValue = new Stack<>();
+    private Stack<Character> actualValue = new Stack<>();
+    private Stack<Character> lastOnMove = new Stack<>();
+    private Stack<Integer> lastMoveNumber = new Stack<>();
 
 
     public Board() {
@@ -113,8 +121,8 @@ public class Board {
      * Is needed for faster searching.
      */
     private void generateMap() {
-        ArrayList<Square> white = new ArrayList<>(10);
-        ArrayList<Square> black = new ArrayList<>(10);
+        white = new ArrayList<>(10);
+        black = new ArrayList<>(10);
 
         for (int row = 0; row < ROWS; row++) {
             for (int column = 0; column < COLUMNS; column++) {
@@ -204,6 +212,7 @@ public class Board {
     public char move(Move move) {
         char objekt = squares[move.getFrom().getRow()][move.getFrom().getCol()];
         char nextPosition = squares[move.getTo().getRow()][move.getTo().getCol()];
+        setRerollPostions(move, objekt, nextPosition);
         updateOwnList(move);
         updateEnemyList(move.getTo());
         squares[move.getFrom().getRow()][move.getFrom().getCol()] = '.';
@@ -229,6 +238,38 @@ public class Board {
         return '?';
     }
 
+    private void setRerollPostions(Move move, char objekt, char nextPosition) {
+        lastMoveNumber.push(movNumber);
+        lastOnMove.push(onMove);
+        lastMove.push(move);
+        lastValue.push(objekt);
+        actualValue.push(nextPosition);
+    }
+
+
+    public void rerollBoard() {
+        onMove = lastOnMove.pop();
+        movNumber = lastMoveNumber.pop();
+        Move lastMove = this.lastMove.pop();
+        char to = actualValue.pop();
+        squares[lastMove.getFrom().getRow()][lastMove.getFrom().getCol()] = lastValue.pop();
+        squares[lastMove.getTo().getRow()][lastMove.getTo().getCol()] = to;
+        if (onMove == 'W') {
+            white.remove(lastMove.getTo());
+            white.add(lastMove.getFrom());
+            if (to != '.') {
+                black.add(lastMove.getTo());
+            }
+        } else {
+            black.remove(lastMove.getTo());
+            black.add(lastMove.getFrom());
+            if (to != '.') {
+                white.add(lastMove.getTo());
+            }
+        }
+
+    }
+
     /**
      * updating the oponents Arraylist of Squares.
      *
@@ -238,12 +279,7 @@ public class Board {
         char enemy = 'B';
         if (onMove == enemy)
             enemy = 'W';
-        for (Square square : map.get(enemy)) {
-            if (square.getRow() == to.getRow() && square.getCol() == to.getCol()) {
-                map.get(enemy).remove(square);
-                return;
-            }
-        }
+        map.get(enemy).remove(to);
     }
 
     /**
@@ -252,13 +288,9 @@ public class Board {
      * @param move current move
      */
     private void updateOwnList(Move move) {
-        for (Square square : map.get(onMove)) {
-            if (square.getRow() == move.getFrom().getRow() && square.getCol() == move.getFrom().getCol()) {
-                map.get(onMove).remove(square);
-                map.get(onMove).add(move.getTo());
-                return;
-            }
-        }
+        map.get(onMove).remove(move.getFrom());
+        map.get(onMove).add(move.getTo());
+
     }
 
     /**
@@ -321,11 +353,7 @@ public class Board {
      */
     private boolean isMovePossible(ArrayList<Move> possibleMoves, Move actualMove) {
         if (possibleMoves != null && !possibleMoves.isEmpty()) {
-            for (Move move : possibleMoves) {
-                if (move.getTo().getRow() == actualMove.getTo().getRow() &&
-                        move.getTo().getCol() == actualMove.getTo().getCol())
-                    return true;
-            }
+            return possibleMoves.contains(actualMove);
         }
         return false;
     }
@@ -378,7 +406,6 @@ public class Board {
     public static int getCOLUMNS() {
         return COLUMNS;
     }
-
 
 
     public char getOnMove() {
