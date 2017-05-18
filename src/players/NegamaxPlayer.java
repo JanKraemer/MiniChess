@@ -48,18 +48,20 @@ public class NegamaxPlayer extends Player {
     private FutureMove getNextMoveAlgorithm(Board board, int deep) {
         if (deep == 0)
             return new FutureMove(StateEvaluator.validateState(board), null);
-        FutureMove move = new FutureMove(-500, null);
+        FutureMove move = new FutureMove(Integer.MIN_VALUE, null);
         for (Move actualMove : board.genMoves()) {
             int value;
-            Board copy = new Board(board);
-            copy.move(actualMove);
-            int value_ = StateEvaluator.validateState(copy) * (-1);
+           // Board copy = new Board(board);
+           // copy.move(actualMove);
+            board.move(actualMove);
+            int value_ = StateEvaluator.validateState(board) * (-1);
             if (value_ > 500 || value_ < -500) {
                 value = value_;
             } else {
-                FutureMove next = getNextMoveAlgorithm(copy, deep - 1);
+                FutureMove next = getNextMoveAlgorithm(board, deep - 1);
                 value = (-1) * next.getScore();
             }
+            board.rerollBoard();
             if (value > move.getScore() || ( value == move.getScore() && randomFunction())) {
                 move.setMove(actualMove);
                 move.setScore(value);
