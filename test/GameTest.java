@@ -1,6 +1,7 @@
 
 import org.junit.Assert;
 import org.junit.Test;
+import players.AlphaBetaPlayer;
 import players.HeuristicPlayer;
 import players.NegamaxPlayer;
 import players.RandomPlayer;
@@ -44,6 +45,18 @@ public class GameTest {
 
         int[] result = game.startForRounds(100);
         Assert.assertTrue(result[0]>= 97 );
+    }
+
+    @Test
+    public void testAlphaBetaPlayer() throws IOException{
+        Game game = Game
+                .getInstance()
+                .withoutClient()
+                .setPlayers(new AlphaBetaPlayer(2),new RandomPlayer())
+                .finish();
+
+        int[] result = game.startForRounds(100);
+        Assert.assertTrue(result[0]>= 99 );
     }
 
     @Test

@@ -49,7 +49,7 @@ public class NegamaxPlayer extends Player {
     private FutureMove getNextMoveAlgorithm(Board board, int deep) {
         if (deep == 0)
             return new FutureMove(StateEvaluator.validateState(board), null);
-        FutureMove move = new FutureMove(Integer.MIN_VALUE, null);
+        FutureMove move = new FutureMove(-500, null);
         for (Move actualMove : board.genMoves()) {
             int value;
             Board copy = new Board(board);
