@@ -40,11 +40,9 @@ public class NegamaxPlayer extends Player {
 
     @Override
     public Move getMove(Board board) throws IOException {
-        long millis = System.currentTimeMillis();
         FutureMove move = getNextMoveAlgorithm(board, this.deep);
         if (client != null)
             client.send(move.getMove().toString(), false);
-        System.out.println(System.currentTimeMillis()-millis+ " "+ deep);
         return move.getMove();
     }
 

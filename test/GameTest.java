@@ -1,3 +1,4 @@
+
 import org.junit.Assert;
 import org.junit.Test;
 import players.HeuristicPlayer;
@@ -61,7 +62,7 @@ public class GameTest {
         Game game = Game
                 .getInstance()
                 .withoutClient()
-                .setPlayers(new NegamaxPlayer(4),new NegamaxPlayer(2))
+                .setPlayers(new NegamaxPlayer(2),new NegamaxPlayer(5))
                 .finish();
 
         int[] result = game.startForRounds(10);
