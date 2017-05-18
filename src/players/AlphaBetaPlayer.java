@@ -54,10 +54,6 @@ public class AlphaBetaPlayer extends Player {
         return move;
     }
 
-    private boolean randomFunction() {
-        return new Random().nextInt(4) == 0 ? true : false;
-    }
-
 
     @Override
     public void print(Board board, Move move) {

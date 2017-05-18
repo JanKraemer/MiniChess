@@ -66,6 +66,12 @@ public class Square {
         System.out.println(square);
     }
 
+    /**
+     * Override given eqauls method to check if two Square are the same.
+     *
+     * @param o object
+     * @return is object equlas this object
+     */
     @Override
     public boolean equals(Object o) {
         // self check

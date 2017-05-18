@@ -238,6 +238,13 @@ public class Board {
         return '?';
     }
 
+    /**
+     * Setting all parameters for a correct reroll
+     *
+     * @param move lastMove
+     * @param objekt value from the from Square on Move
+     * @param nextPosition value of the position where we want to go
+     */
     private void setRerollPostions(Move move, char objekt, char nextPosition) {
         lastMoveNumber.push(movNumber);
         lastOnMove.push(onMove);
@@ -246,6 +253,9 @@ public class Board {
         actualValue.push(nextPosition);
     }
 
+    /**
+     *  Doing a Reroll on he Board and reset all params
+     */
 
     public void rerollBoard() {
         onMove = lastOnMove.pop();
