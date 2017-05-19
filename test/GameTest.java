@@ -118,6 +118,18 @@ public class GameTest {
     }
 
     @Test
+    public void testTimeAlphaBeta() throws IOException{
+        Game game = Game
+                .getInstance()
+                .withoutClient()
+                .setPlayers(new TimeAlphaBetaPlayer(7),new NegamaxPlayer(2))
+                .finish();
+
+        game.start();
+
+    }
+
+    @Test
     public void checkMoveAway() throws IOException {
         Board board = new Board(generateResqueValue());
         Player player = new AlphaBetaPlayer(7);
