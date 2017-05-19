@@ -5,6 +5,13 @@ import gamecomponents.Board;
 import gamecomponents.Move;
 import org.junit.Assert;
 import org.junit.Test;
+import players.AlphaBetaPlayer;
+import players.NegamaxPlayer;
+import players.Player;
+
+import java.io.IOException;
+
+import static java.lang.Math.E;
 
 public class BoardTest {
 
@@ -70,5 +77,26 @@ public class BoardTest {
         board.rerollBoard();
         board.rerollBoard();
         Assert.assertEquals(check,board.toString());
+    }
+
+    @Test
+    public void checkTime() throws IOException {
+        long[] times = new long[3];
+        for(int i = 0;i< 10;i++){
+            Player player = new AlphaBetaPlayer(7);
+            long milis = System.nanoTime();
+            Board board = new Board();
+            times[0]+=System.nanoTime()-milis;
+            milis = System.nanoTime();
+            board.move(player.getMove(board));
+            times[1]+=System.nanoTime()-milis;
+            milis = System.nanoTime();
+            board.rerollBoard();
+            times[2]+=System.nanoTime()-milis;
+        }
+
+        System.out.println((times[0]/10)+ "ns Konstruktor");
+        System.out.println((times[1]/10)%(1E9)+ "s Make Move");
+        System.out.println((times[2]/10)+ "ns Reroll Move");
     }
 }

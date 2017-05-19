@@ -19,7 +19,7 @@ public class AlphaBetaPlayer extends Player {
     @Override
     public Move getMove(Board board) throws IOException {
         FutureMove move = alphabetanegamax(board, this.deep, 500, -500);
-        if (client != null)
+        if (client != null && move != null)
             client.send(move.getMove().toString(), false);
         return move.getMove();
     }
@@ -31,8 +31,6 @@ public class AlphaBetaPlayer extends Player {
         FutureMove move = new FutureMove(Integer.MIN_VALUE, null);
         for (Move actualMove : board.genMoves()) {
             int score;
-           // Board copy = new Board(board);
-           // copy.move(actualMove);
             board.move(actualMove);
             int value_ = StateEvaluator.validateState(board) * (-1);
             if (value_ > 500 || value_ < -500) {
