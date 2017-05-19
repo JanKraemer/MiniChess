@@ -5,8 +5,14 @@ import gamecomponents.StateEvaluator;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * test class for the stateevaluator class
+ */
 public class StateEvaluatorTest {
 
+    /**
+     * check if the stateelevator is zeor for the default board
+     */
     @Test
     public void checkStateElavatorWithStartBoard(){
         Board board = new Board();
@@ -14,6 +20,9 @@ public class StateEvaluatorTest {
         Assert.assertEquals(0,val);
     }
 
+    /**
+     * check the scoring with a generated board
+     */
     @Test
     public void validateGivenBoard(){
         String state = BoardTest.generateTestValue();
@@ -22,8 +31,11 @@ public class StateEvaluatorTest {
         Assert.assertEquals(-2,val);
     }
 
+    /**
+     * check score for another given board
+     */
     @Test
-    public void validateBoard1000(){
+    public void validateBoard(){
         String state = generateTestValue();
         Board board = new Board(state);
         int val = StateEvaluator.validateState(board);
