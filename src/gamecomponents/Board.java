@@ -21,6 +21,10 @@ import java.util.Vector;
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+/**
+ * Providing a mini chess board for the game
+ */
 public class Board {
 
     public static char king = 'k';
@@ -51,21 +55,6 @@ public class Board {
 
     public Board(String state) {
         initBoard(state);
-    }
-
-    public Board(Board board) {
-        copyValues(board);
-    }
-
-    private void copyValues(Board board) {
-        onMove = board.getOnMove();
-        movNumber = board.movNumber;
-        char[][] oldboard = board.getSquares();
-        for (int y = 0; y < oldboard.length; y++) {
-            for (int x = 0; x < oldboard[y].length; x++) {
-                this.squares[y][x] = oldboard[y][x];
-            }
-        }
     }
 
     /**
@@ -104,20 +93,36 @@ public class Board {
 
     }
 
+    /**
+     * Making the line for white player
+     * @return a array[] with the white start line
+     */
     private char[] makeWhiteLine() {
         return new char[]{(char) (rook - 32), (char) (night - 32), (char) (bishop - 32), (char) (queen - 32), (char) (king - 32)};
     }
 
+    /**
+     * Making the line for black player
+     * @return a array[] with the black start line
+     */
     private char[] makeBlackLine() {
         return new char[]{king, queen, bishop, night, rook};
     }
 
+    /**
+     * Adding free Lines to the array
+     * @param row actual row
+     */
     private void addFreeLine(int row) {
         for (int index = 0; index < squares[row].length; index++) {
             squares[row][index] = FREEPOSITION;
         }
     }
 
+    /**
+     * Adding Prawns to the board
+     * @param column actual column on the board
+     */
     private void addPrawns(int column) {
         for (int index = 0; index < squares[column].length; index++) {
             if (column == 4)
@@ -127,6 +132,10 @@ public class Board {
         }
     }
 
+    /**
+     * Generates a board with a given Reader
+     * @param reader board as FileReader
+     */
     public Board(Reader reader) {
         BufferedReader bufferedReader = new BufferedReader(reader);
         String line = null;
@@ -144,6 +153,10 @@ public class Board {
         }
     }
 
+    /**
+     * Overriden toString method
+     * @return the board as String
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder()

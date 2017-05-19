@@ -19,6 +19,9 @@ import java.util.Map;
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * StateEvaluator with all scores
+ */
 public class StateEvaluator {
 
     static int prawn = 10;
@@ -29,6 +32,12 @@ public class StateEvaluator {
     static int king = 10000;
     static char actualPlayerColor;
 
+    /**
+     * validate the given board for the negamax algorithm
+     *
+     * @param board actual board
+     * @return the score for the actual board
+     */
     public static int validateState(Board board) {
         int score = 0;
         actualPlayerColor = board.getOnMove();
@@ -44,6 +53,9 @@ public class StateEvaluator {
         return score;
     }
 
+    /**
+     * Checking if the actual character is from the same color
+     */
     private  static boolean isPieceFromActualColor(char c) {
         if (actualPlayerColor == 'W') {
             if (c != '.' && (c > 'A' && c < 'Z'))
@@ -55,6 +67,12 @@ public class StateEvaluator {
         return false;
     }
 
+    /**
+     * given the score for this character back
+     *
+     * @param c actual piece
+     * @return the value for the piece
+     */
     private static int getScoreFromPosition(char c) {
         if( c == 'p' || c == 'P')
             return prawn;
