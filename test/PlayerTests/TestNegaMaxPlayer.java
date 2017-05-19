@@ -9,9 +9,6 @@ import players.Player;
 
 import java.io.IOException;
 
-/**
- * Created by Jan on 17.05.2017.
- */
 public class TestNegaMaxPlayer {
 
     @Test
