@@ -21,6 +21,10 @@ import java.util.Random;
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+/**
+ * Provides a NegamaxPlayer
+ */
 public class NegamaxPlayer extends Player {
 
     private int deep;
@@ -37,6 +41,13 @@ public class NegamaxPlayer extends Player {
         return client;
     }
 
+    /**
+     * returning the best Move for the actual board
+     *
+     * @param board actual state == board
+     * @return best Move
+     * @throws IOException
+     */
     @Override
     public Move getMove(Board board) throws IOException {
         FutureMove move = getNextMoveAlgorithm(board, this.deep);
@@ -45,14 +56,19 @@ public class NegamaxPlayer extends Player {
         return move.getMove();
     }
 
+    /**
+     * Doing the AlphaBetaAlgorithm for getting the best Move with its score
+     *
+     * @param board actual board
+     * @param deep deep for the algorithm
+     * @return the best Move
+     */
     private FutureMove getNextMoveAlgorithm(Board board, int deep) {
         if (deep == 0)
             return new FutureMove(StateEvaluator.validateState(board), null);
         FutureMove move = new FutureMove(Integer.MIN_VALUE, null);
         for (Move actualMove : board.genMoves()) {
             int value;
-           // Board copy = new Board(board);
-           // copy.move(actualMove);
             board.move(actualMove);
             int value_ = (int) ((StateEvaluator.validateState(board) * (-1))*0.9);
             if (value_ > 8500 || value_ < -8500) {
@@ -70,11 +86,20 @@ public class NegamaxPlayer extends Player {
         return move;
     }
 
+    /**
+     * Randomize the function for algorithm
+     * @return
+     */
     private boolean randomFunction() {
         return new Random().nextInt(4) == 0 ? true : false;
     }
 
 
+    /**
+     * Printing the actual move and board
+     * @param board actual board
+     * @param move  actual move from the player
+     */
     @Override
     public void print(Board board, Move move) {
         System.out.println(move + " Negamx\n" + board);

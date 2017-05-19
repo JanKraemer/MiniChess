@@ -94,7 +94,7 @@ public class GameTest {
 
     }
     @Test
-    public void testAlphaBetaPlayer1000Times() throws IOException{
+    public void testMultiAgainsRandom() throws IOException{
         Game game = Game
                 .getInstance()
                 .withoutClient()
@@ -174,7 +174,7 @@ public class GameTest {
     /**
      * generate a special TestValue
      *
-     * @return
+     * @return a String with the board
      */
     public static String generateKillValue() {
         String[] field = {"10 W\n",

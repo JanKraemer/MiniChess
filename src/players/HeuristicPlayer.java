@@ -23,6 +23,10 @@ import java.util.Random;
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+/**
+ * Provides a HeuristicPlayer
+ */
 public class HeuristicPlayer extends Player {
 
     public HeuristicPlayer() {
@@ -54,14 +58,20 @@ public class HeuristicPlayer extends Player {
         return move;
     }
 
+    /**
+     * provides the best move for the acutal board
+     *
+     * @param board actual board
+     * @param moves list of all moves
+     * @return the best move
+     */
     private ArrayList<Move> getBestMove(Board board, ArrayList<Move> moves) {
         int score = Integer.MIN_VALUE;
         int actualScore = 0;
         ArrayList<Move> possiblesMoves = new ArrayList<>();
         for (Move actualMove : moves) {
-            Board testBoard = new Board(board);
-            testBoard.move(actualMove);
-            actualScore = -StateEvaluator.validateState(testBoard);
+            board.move(actualMove);
+            actualScore = -StateEvaluator.validateState(board);
             if (actualScore > score) {
                 possiblesMoves.clear();
                 score = actualScore;
@@ -69,6 +79,7 @@ public class HeuristicPlayer extends Player {
             } else if (score == actualScore) {
                 possiblesMoves.add(actualMove);
             }
+            board.rerollBoard();
         }
         return possiblesMoves;
     }

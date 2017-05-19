@@ -14,6 +14,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+/**
+ * MultiPlayer for MultiThreading
+ */
 public class MultiPlayer  extends Player{
 
     private int deep;
@@ -24,12 +27,19 @@ public class MultiPlayer  extends Player{
         service = Executors.newFixedThreadPool(10);
     }
 
+    /**
+     * Getting the best move from the MultiTaskPlayer
+     *
+     * @param board actual state == board
+     * @return best Move
+     * @throws IOException
+     */
     @Override
     public Move getMove(Board board) throws IOException {
         List<Future> futures = new ArrayList<Future>();
         ArrayList<FutureMove> moves = new ArrayList<>();
         for(Move move: board.genMoves()){
-            AlphaBetaWorker worker = new AlphaBetaWorker(new Board(board),move,deep,500,-500);
+            AlphaBetaWorker worker = new AlphaBetaWorker(board,move,deep,500,-500);
            Future<FutureMove> f = service.submit(worker);
            futures.add(f);
         }
@@ -49,7 +59,11 @@ public class MultiPlayer  extends Player{
         return moves.get(moves.size()-1).getMove();
     }
 
-
+    /**
+     * Printing the actual Move and board
+     * @param board actual board
+     * @param move  actual move from the player
+     */
     @Override
     public void print(Board board, Move move) {
         System.out.println(move + " ALPHABETA\n" + board);

@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
+/**
+ * TimedAlphaBetaPlayer
+ */
 public class TimeAlphaBetaPlayer extends Player {
 
     private int deep;
@@ -19,16 +22,31 @@ public class TimeAlphaBetaPlayer extends Player {
         this.deep = deep;
     }
 
+    /**
+     *  Provides the best move for this board
+     *
+     * @param board actual state == board
+     * @return best Move
+     * @throws IOException
+     */
     @Override
     public Move getMove(Board board) throws IOException {
         time = System.currentTimeMillis();
         counter = 0;
-        FutureMove move = getNextMove(new Board(board), 8500, -8500);
+        FutureMove move = getNextMove(board, 8500, -8500);
         if (client != null && move != null)
             client.send(move.getMove().toString(), false);
         return move.getMove();
     }
 
+    /**
+     * Given back the best FutureMove back with the Score and Move
+     *
+     * @param board actual board
+     * @param beta given beta
+     * @param alpha given alpha
+     * @return best FutureMove with score and move
+     */
     private FutureMove getNextMove(Board board, int beta, int alpha) {
         int deep = this.deep;
         FutureMove move = null;
@@ -52,6 +70,16 @@ public class TimeAlphaBetaPlayer extends Player {
         }
     }
 
+    /**
+     * AlphaBeta Algorithm which provides the best FutureMove
+     *
+     * @param board actual board
+     * @param deep depth for the algorithm
+     * @param beta beta value
+     * @param alpha alpha value
+     * @return best FutureMove for the board
+     * @throws TimeoutException given when the time is over
+     */
     private FutureMove alphabetanegamax(Board board, int deep, int beta, int alpha) throws TimeoutException {
         counter++;
         if (deep == 0)
@@ -85,6 +113,10 @@ public class TimeAlphaBetaPlayer extends Player {
         return move;
     }
 
+    /**
+     * method to check if the time is over
+     * @throws TimeoutException when the time is up
+     */
     private void checkTime() throws TimeoutException {
         long times = System.currentTimeMillis();
         if (times >= (time + 7000)) {
@@ -92,6 +124,11 @@ public class TimeAlphaBetaPlayer extends Player {
         }
     }
 
+    /**
+     * printing the move with the actual board
+     * @param board actual board
+     * @param move  actual move from the player
+     */
     @Override
     public void print(Board board, Move move) {
         System.out.println(move + " TimePlayer\n" + board);
