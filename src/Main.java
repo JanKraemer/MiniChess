@@ -38,7 +38,7 @@ public class Main {
 
         Game game = Game.getInstance()
                 .withClient(args)
-                .setPlayer(new AlphaBetaPlayer(6))
+                .setPlayer(new AlphaBetaPlayer(7))
                 .finish();
         try{
            game.startNetworkGame();
