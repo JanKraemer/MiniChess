@@ -81,7 +81,7 @@ public class BoardTest {
 
     @Test
     public void checkTime() throws IOException {
-        long[] times = new long[3];
+        double[] times = new double[3];
         for(int i = 0;i< 10;i++){
             Player player = new AlphaBetaPlayer(7);
             long milis = System.nanoTime();
@@ -89,6 +89,7 @@ public class BoardTest {
             times[0]+=System.nanoTime()-milis;
             milis = System.nanoTime();
             board.move(player.getMove(board));
+            System.out.println(System.nanoTime()-milis);
             times[1]+=System.nanoTime()-milis;
             milis = System.nanoTime();
             board.rerollBoard();

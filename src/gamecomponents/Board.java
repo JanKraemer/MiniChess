@@ -31,9 +31,6 @@ public class Board {
     public static char FREEPOSITION = '.';
     public static char PRAWN_BLACK = 'p';
     public static char PRAWN_WHITE = 'P';
-    private HashMap<Character, ArrayList<Square>> map = new HashMap<Character, ArrayList<Square>>();
-    private ArrayList<Square> white = new ArrayList<>();
-    private ArrayList<Square> black = new ArrayList<>();
     public static int ROWS = 6;
     public static int COLUMNS = 5;
     private char[][] squares = new char[ROWS][COLUMNS];
@@ -69,7 +66,6 @@ public class Board {
                 this.squares[y][x] = oldboard[y][x];
             }
         }
-        generateMap();
     }
 
     /**
@@ -105,7 +101,7 @@ public class Board {
 
             }
         }
-        generateMap();
+
     }
 
     private char[] makeWhiteLine() {
@@ -114,29 +110,6 @@ public class Board {
 
     private char[] makeBlackLine() {
         return new char[]{king, queen, bishop, night, rook};
-    }
-
-    /**
-     * Generating the hashmap with all Squares of each side.
-     * Is needed for faster searching.
-     */
-    private void generateMap() {
-        white = new ArrayList<>(10);
-        black = new ArrayList<>(10);
-
-        for (int row = 0; row < ROWS; row++) {
-            for (int column = 0; column < COLUMNS; column++) {
-                if (isNotFree(squares[row][column])) {
-                    if (squares[row][column] > 'A' && squares[row][column] <= 'Z') {
-                        white.add(new Square(column, row));
-                    } else {
-                        black.add(new Square(column, row));
-                    }
-                }
-            }
-        }
-        map.put('W', white);
-        map.put('B', black);
     }
 
     private void addFreeLine(int row) {
@@ -187,9 +160,6 @@ public class Board {
         return builder.toString();
     }
 
-    public HashMap<Character, ArrayList<Square>> getMap() {
-        return map;
-    }
 
     /**
      * Generate a String for the toString method to print the first Line with
@@ -213,8 +183,6 @@ public class Board {
         char objekt = squares[move.getFrom().getRow()][move.getFrom().getCol()];
         char nextPosition = squares[move.getTo().getRow()][move.getTo().getCol()];
         setRerollPostions(move, objekt, nextPosition);
-        updateOwnList(move);
-        updateEnemyList(move.getTo());
         squares[move.getFrom().getRow()][move.getFrom().getCol()] = '.';
         if (onMove == 'W') {
             onMove = 'B';
@@ -261,47 +229,10 @@ public class Board {
         onMove = lastOnMove.pop();
         movNumber = lastMoveNumber.pop();
         Move lastMove = this.lastMove.pop();
-        char to = actualValue.pop();
         squares[lastMove.getFrom().getRow()][lastMove.getFrom().getCol()] = lastValue.pop();
-        squares[lastMove.getTo().getRow()][lastMove.getTo().getCol()] = to;
-        if (onMove == 'W') {
-            white.remove(lastMove.getTo());
-            white.add(lastMove.getFrom());
-            if (to != '.') {
-                black.add(lastMove.getTo());
-            }
-        } else {
-            black.remove(lastMove.getTo());
-            black.add(lastMove.getFrom());
-            if (to != '.') {
-                white.add(lastMove.getTo());
-            }
-        }
-
+        squares[lastMove.getTo().getRow()][lastMove.getTo().getCol()] = actualValue.pop();
     }
 
-    /**
-     * updating the oponents Arraylist of Squares.
-     *
-     * @param to gamecomponents.Move
-     */
-    private void updateEnemyList(Square to) {
-        char enemy = 'B';
-        if (onMove == enemy)
-            enemy = 'W';
-        map.get(enemy).remove(to);
-    }
-
-    /**
-     * update my Arraylist of Squares , to be always save
-     *
-     * @param move current move
-     */
-    private void updateOwnList(Move move) {
-        map.get(onMove).remove(move.getFrom());
-        map.get(onMove).add(move.getTo());
-
-    }
 
     /**
      * check if it is a Prawn.
@@ -389,12 +320,14 @@ public class Board {
      */
     public ArrayList<Move> genMoves() {
         ArrayList<Move> moves = new ArrayList<>();
-        for (Square actual : map.get(onMove)) {
-            moves.addAll(Algorithm.moveList(this, actual.getRow(), actual.getCol()));
+        for (int y = 0; y < ROWS; y++) {
+            for(int x = 0;x < COLUMNS;x++)
+                if(squares[y][x] != '.' && isPieceFromActualColor(squares[y][x])){
+                    moves.addAll(Algorithm.moveList(this, y, x));
+                }
         }
         return moves;
     }
-
 
     /**
      * giving a piece and check if he is on turn.

@@ -21,30 +21,38 @@ import java.util.Map;
 
 public class StateEvaluator {
 
-    static int prawn = 1;
-    static int rook = 2;
-    static int knight = 4;
-    static int bishop = 6;
-    static int queen = 9;
-    static int king = 1000;
+    static int prawn = 10;
+    static int rook = 20;
+    static int knight = 40;
+    static int bishop = 60;
+    static int queen = 90;
+    static int king = 10000;
+    static char actualPlayerColor;
 
     public static int validateState(Board board) {
-        Map<Character, ArrayList<Square>> pieces = board.getMap();
-        char actualPlayerColor = board.getOnMove();
-        char nextPlayerColor = 'W';
-        if (actualPlayerColor == nextPlayerColor)
-            nextPlayerColor = 'B';
-        int actualPlayerScore = calcScore(board.getSquares(), pieces.get(actualPlayerColor));
-        int nextPlayScore = calcScore(board.getSquares(), pieces.get(nextPlayerColor));
-        return actualPlayerScore - nextPlayScore;
-    }
-
-    private static int calcScore(char[][] squares, ArrayList<Square> allPostitions) {
         int score = 0;
-        for (Square square : allPostitions) {
-            score += getScoreFromPosition(squares[square.getRow()][square.getCol()]);
+        actualPlayerColor = board.getOnMove();
+        char[][] squares = board.getSquares();
+        for(int y = 0;y < squares.length;y++){
+            for(int x = 0;x < squares[y].length;x++){
+                if(squares[y][x] != '.'){
+                   score = isPieceFromActualColor(squares[y][x]) ? score+getScoreFromPosition(squares[y][x]) :
+                           score-getScoreFromPosition(squares[y][x]);
+                }
+            }
         }
         return score;
+    }
+
+    private  static boolean isPieceFromActualColor(char c) {
+        if (actualPlayerColor == 'W') {
+            if (c != '.' && (c > 'A' && c < 'Z'))
+                return true;
+        } else if (actualPlayerColor == 'B') {
+            if (c != '.' && (c > 'a' && c < 'z'))
+                return true;
+        }
+        return false;
     }
 
     private static int getScoreFromPosition(char c) {

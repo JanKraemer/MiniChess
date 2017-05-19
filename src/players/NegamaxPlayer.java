@@ -54,8 +54,8 @@ public class NegamaxPlayer extends Player {
            // Board copy = new Board(board);
            // copy.move(actualMove);
             board.move(actualMove);
-            int value_ = StateEvaluator.validateState(board) * (-1);
-            if (value_ > 500 || value_ < -500) {
+            int value_ = (int) ((StateEvaluator.validateState(board) * (-1))*0.9);
+            if (value_ > 8500 || value_ < -8500) {
                 value = value_;
             } else {
                 FutureMove next = getNextMoveAlgorithm(board, deep - 1);

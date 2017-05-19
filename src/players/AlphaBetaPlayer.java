@@ -6,6 +6,7 @@ import gamecomponents.Move;
 import gamecomponents.StateEvaluator;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class AlphaBetaPlayer extends Player {
@@ -18,7 +19,7 @@ public class AlphaBetaPlayer extends Player {
 
     @Override
     public Move getMove(Board board) throws IOException {
-        FutureMove move = alphabetanegamax(board, this.deep, 500, -500);
+        FutureMove move = alphabetanegamax(board, this.deep, 8500, -8500);
         if (client != null && move != null)
             client.send(move.getMove().toString(), false);
         return move.getMove();
@@ -29,11 +30,13 @@ public class AlphaBetaPlayer extends Player {
         if (deep == 0)
             return new FutureMove(StateEvaluator.validateState(board), null);
         FutureMove move = new FutureMove(Integer.MIN_VALUE, null);
-        for (Move actualMove : board.genMoves()) {
+        ArrayList<Move> moves = board.genMoves();
+
+        for (Move actualMove : moves) {
             int score;
             board.move(actualMove);
-            int value_ = StateEvaluator.validateState(board) * (-1);
-            if (value_ > 500 || value_ < -500) {
+            int value_ = (int) ((StateEvaluator.validateState(board) * (-1))*0.9);
+            if (value_ > 8500 || value_ < -8500 ) {
                 score = value_;
             } else {
                 FutureMove next = alphabetanegamax(board, deep - 1, (-1) * alpha, (-1) * beta);
@@ -41,7 +44,7 @@ public class AlphaBetaPlayer extends Player {
             }
             board.rerollBoard();
             if (score > beta)
-                return new FutureMove(score, actualMove);
+                return new FutureMove(value_, actualMove);
             if (score > alpha)
                 alpha = score;
             if (score > move.getScore()){
