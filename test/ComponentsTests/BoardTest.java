@@ -13,6 +13,9 @@ import java.io.IOException;
 
 import static java.lang.Math.E;
 
+/**
+ * Test the board class
+ */
 public class BoardTest {
 
     /**
@@ -38,6 +41,9 @@ public class BoardTest {
         return builder.toString();
     }
 
+    /**
+     * check if the state constructor working right
+     */
     @Test
     public void checkStateConstrutor(){
         String state = generateTestValue();
@@ -45,29 +51,10 @@ public class BoardTest {
         Assert.assertEquals(state,board.toString());
     }
 
-    @Test
-    public void checkCopyConstructor(){
-        Board board = new Board();
-        Board second = new Board(board);
 
-        Assert.assertEquals(second.getOnMove(),board.getOnMove());
-        Assert.assertEquals(second.toString(),board.toString());
-    }
-
-    @Test
-    public void CheckTimeForCopyBoard(){
-        Board board = new Board();
-        long nano = System.nanoTime();
-        Board second = new Board(board);
-        System.out.println(System.nanoTime()-nano);
-        board.move(new Move("a2-a3"));
-        nano = System.nanoTime();
-        board.rerollBoard();
-        System.out.println(System.nanoTime()-nano);
-       // Assert.assertEquals(second.getOnMove(),board.getOnMove());
-       // Assert.assertEquals(second.toString(),board.toString());
-    }
-
+    /**
+     * checking if the reroll function works fine
+     */
     @Test
     public void checkReroll(){
         Board board = new Board();
@@ -79,6 +66,10 @@ public class BoardTest {
         Assert.assertEquals(check,board.toString());
     }
 
+    /**
+     * check the needed time for some functions of the board class
+     * @throws IOException
+     */
     @Test
     public void checkTime() throws IOException {
         double[] times = new double[3];
