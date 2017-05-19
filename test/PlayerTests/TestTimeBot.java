@@ -8,8 +8,16 @@ import players.TimeAlphaBetaPlayer;
 
 import java.io.IOException;
 
+/**
+ * test class for checking the needed time after refactoring the board
+ */
 public class TestTimeBot {
 
+    /**
+     * check the time needed for creating board, getting a move from a TimeLphaBetaPlayer
+     * and the rerollBoard function
+     * @throws IOException
+     */
     @Test
     public void checkTime() throws IOException {
         double[] times = new double[3];

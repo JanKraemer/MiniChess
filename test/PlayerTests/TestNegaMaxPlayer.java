@@ -9,8 +9,15 @@ import players.Player;
 
 import java.io.IOException;
 
+/**
+ * testclass for the negamaxplayer
+ */
 public class TestNegaMaxPlayer {
 
+    /**
+     * check if NegamaxPlayer takes the given move for this board
+     * @throws IOException
+     */
     @Test
     public  void testNegamaxPlayer() throws IOException{
         Board board = new Board(generateTestValue());
@@ -20,7 +27,10 @@ public class TestNegaMaxPlayer {
         Assert.assertEquals("b4-c2",move.toString());
     }
 
-
+    /**
+     * generate a board with given values
+     * @return the board as string
+     */
     public static String generateTestValue() {
         String[] field = {"1 B\n",
                 "6 | k | q | b | . | r | ",

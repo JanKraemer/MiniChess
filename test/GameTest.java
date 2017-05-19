@@ -7,8 +7,15 @@ import players.*;
 
 import java.io.IOException;
 
+/**
+ * Checking some games
+ */
 public class GameTest {
 
+    /**
+     * Check if the Heuristicplayer always wins again the RandomPlayer
+     * @throws IOException
+     */
     @Test
     public void testHeuristicPlayer() throws IOException{
         Game game = Game
@@ -21,7 +28,10 @@ public class GameTest {
         Assert.assertTrue(result[0]>= 97 );
     }
 
-
+    /**
+     * check if the NegamaxPlayer with Depth Two always wins agains the randomPlayer
+     * @throws IOException
+     */
     @Test
     public void testNegaMaxPlayerDeepTWO() throws IOException{
         Game game = Game
@@ -34,6 +44,10 @@ public class GameTest {
         Assert.assertTrue(result[0]>= 99 );
     }
 
+    /**
+     * test the NegamaxPlayer with deoth 1 agains the randomplayer
+     * @throws IOException
+     */
     @Test
     public void testNegaMaxPlayerDeepONE() throws IOException{
         Game game = Game
@@ -46,6 +60,10 @@ public class GameTest {
         Assert.assertTrue(result[0]>= 97 );
     }
 
+    /**
+     * Check if the AlphaBetaPlayer wins all 50 games agains the Randomplayer
+     * @throws IOException
+     */
     @Test
     public void testAlphaBetaPlayer() throws IOException{
         Game game = Game
@@ -58,6 +76,12 @@ public class GameTest {
         Assert.assertTrue(result[0]== 50 );
     }
 
+    /**
+     * check if the negamaxplayer with deep Four will always wins agains
+     * the RandomPlayer
+     *
+     * @throws IOException
+     */
     @Test
     public void testNegaMaxPlayerDeepFOUR() throws IOException{
         Game game = Game
@@ -69,6 +93,10 @@ public class GameTest {
         int[] result = game.startForRounds(25);
         Assert.assertTrue(result[0]== 25 );
     }
+
+    /**
+     * check if a Negamaxplayer with depth 5 will wins agaings one with depth 2
+     */
     @Test
     public void testNegaMaxPlayerDeepFourAgainTwo() throws IOException{
         Game game = Game
@@ -81,6 +109,10 @@ public class GameTest {
         Assert.assertTrue(result[0]== 1 );
     }
 
+    /**
+     * test Negamax two agains 4
+     * @throws IOException
+     */
     @Test
     public void test2VS4Nega() throws IOException{
         Game game = Game
@@ -93,6 +125,11 @@ public class GameTest {
         Assert.assertTrue(result[1] == 1 );
 
     }
+
+    /**
+     * testing multithreadplayer with depth 7 agains randomplayer
+     * @throws IOException
+     */
     @Test
     public void testMultiAgainsRandom() throws IOException{
         Game game = Game
@@ -105,6 +142,10 @@ public class GameTest {
         Assert.assertTrue(result[0]>= 1 );
     }
 
+    /**
+     * test AlphabetaPlayer agains the NegamaxPlayer of depth two
+     * @throws IOException
+     */
     @Test
     public void testAlphaAgainNega() throws IOException{
         Game game = Game
@@ -117,6 +158,10 @@ public class GameTest {
 
     }
 
+    /**
+     * check how deep the TimealphaBetaPlayer will come with a depth of 7 and 7 seconds of time
+     * @throws IOException
+     */
     @Test
     public void testTimeAlphaBeta() throws IOException{
         Game game = Game
@@ -129,6 +174,10 @@ public class GameTest {
 
     }
 
+    /**
+     * checks if the AlphabetaPlayer with depth 7 will rescue himself for a lose
+     * @throws IOException
+     */
     @Test
     public void checkMoveAway() throws IOException {
         Board board = new Board(generateResqueValue());
@@ -138,7 +187,10 @@ public class GameTest {
         Move expected = new Move("e6-e5");
         Assert.assertEquals(move.toString(),expected.toString());
     }
-
+    /**
+     * checks if the AlphabetaPlayer kills the enemy king with the next move
+     * @throws IOException
+     */
     @Test
     public void checkKillKing() throws IOException {
         Board board = new Board(generateKillValue());
